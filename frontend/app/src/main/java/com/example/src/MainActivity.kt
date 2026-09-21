@@ -1,6 +1,7 @@
 package com.example.src
 
 import android.graphics.Camera
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.AlertDialog
@@ -22,6 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 
 import com.example.src.ui.theme.SrcTheme
 import androidx.compose.ui.unit.dp
@@ -33,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UserManager.getInstance(applicationContext)
         enableEdgeToEdge()
         setContent {
             SrcTheme {
@@ -60,6 +66,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val context = LocalContext.current
+
+    // Grab singleton instance & store
+    val userManager = remember { UserManager.getInstance(context) }
+
+    // Read uuid from stream
+    val userId: String? by userManager.userId.collectAsState()
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -68,6 +81,15 @@ fun HomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            // 3. Debug Text at the top
+            Text(
+                text = "Debug UUID: ${userId ?: "Loading..."}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Green
+            )
+
+
             Spacer(modifier = Modifier.height(300.dp))
 
             CameraButton(navController = navController)
