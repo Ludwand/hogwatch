@@ -25,4 +25,5 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
+    testImplementation("io.ktor:ktor-client-content-negotiation:${version}")
 }

@@ -1,0 +1,16 @@
+
+# Gradle- och byggfiler
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA (Filer för din lokala editor)
+.idea/
+*.iml
+out/
+
+# macOS (Systemfiler som Mac skapar i smyg)
+.DS_Store
+
+# Loggfiler
+*.log
