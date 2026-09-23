@@ -1,4 +1,4 @@
-package backend
+package com.example.hogwatch.backend
 
 import java.sql.*
 import java.util.Properties

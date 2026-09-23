@@ -1,4 +1,4 @@
-package com.example.src
+package com.example.hogwatch.frontend
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

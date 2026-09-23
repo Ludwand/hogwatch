@@ -1,4 +1,4 @@
-package com.example
+package com.example.hogwatch.backend
 
 import io.ktor.server.application.*
 import io.ktor.serialization.kotlinx.json.*

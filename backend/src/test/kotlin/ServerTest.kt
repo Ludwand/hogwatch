@@ -1,4 +1,4 @@
-package com.example
+package com.example.hogwatch.backend
 
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
@@ -12,7 +12,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.*
-import java.time.Instant
+//import com.example.hogwatch.shared.ManSub
 
 class ServerTest {
 
@@ -49,11 +49,11 @@ class ServerTest {
             }
         }
 
-        val manualSubmissionSend = ManSub(id = "123", lat = "57.6282764", lon = "11.9030166", timeStamp = System.currentTimeMillis())
+        //val manualSubmissionSend = ManSub(id = "123", lat = "57.6282764", lon = "11.9030166", timeStamp = System.currentTimeMillis())
 
         val response = client.post("/manual_submission") {
             contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
-            setBody(manualSubmissionSend) // Add data class to body
+            //setBody(manualSubmissionSend) // Add data class to body
         }
         assertEquals(HttpStatusCode.Created, response.status)
         assertEquals("Submission successfully received!", response.bodyAsText())

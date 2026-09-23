@@ -1,4 +1,4 @@
-package com.example
+package com.example.hogwatch.backend
 
 import io.ktor.http.*
 import io.ktor.server.application.*

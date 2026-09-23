@@ -24,7 +24,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation("org.postgresql:postgresql:42.7.4")
 
+    implementation(project(":shared"))
+
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
     testImplementation("io.ktor:ktor-client-content-negotiation:${version}")
+    //testImplementation(project(":shared"))
 }

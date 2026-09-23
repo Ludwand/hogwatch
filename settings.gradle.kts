@@ -2,7 +2,7 @@ rootProject.name = "HogWatch"
 
 include(":backend")
 include(":frontend:app")
-// include(":shared")
+include(":shared")
 
 
 pluginManagement {

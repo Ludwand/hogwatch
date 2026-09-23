@@ -1,4 +1,4 @@
-package com.example.src
+package com.example.hogwatch.frontend
 
 import android.graphics.Camera
 import androidx.compose.ui.graphics.Color

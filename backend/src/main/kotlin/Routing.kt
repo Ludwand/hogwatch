@@ -1,4 +1,5 @@
-package com.example
+package com.example.hogwatch.backend
+
 
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -7,19 +8,10 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-
-@Serializable
-data class ManSub(
-    val id: String,
-    val lat: String,
-    val lon: String,
-    val timeStamp: Long
-)
-
+import com.example.shared.ManSub
 
 fun Application.configureRouting() {
     routing {
