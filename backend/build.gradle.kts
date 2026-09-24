@@ -12,7 +12,7 @@ application {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 dependencies {
     implementation(ktorLibs.serialization.kotlinx.json)

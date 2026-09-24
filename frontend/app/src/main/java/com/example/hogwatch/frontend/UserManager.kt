@@ -1,5 +1,4 @@
 package com.example.hogwatch.frontend
-
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey

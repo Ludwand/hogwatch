@@ -1,4 +1,4 @@
-package com.example.src.ui.theme
+package com.example.hogwatch.frontend.theme
 
 import androidx.compose.ui.graphics.Color
 

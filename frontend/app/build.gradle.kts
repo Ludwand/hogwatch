@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.src"
+    namespace = "com.example.hogwatch.frontend"
     compileSdk {
-        version = release(37)
+        version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.src"
+        applicationId = "com.example.hogwatch"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
@@ -27,8 +27,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
     testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    //androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

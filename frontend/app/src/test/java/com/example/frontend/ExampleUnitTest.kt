@@ -1,4 +1,4 @@
-package com.example.src
+package com.example.frontend
 
 import org.junit.Test
 
