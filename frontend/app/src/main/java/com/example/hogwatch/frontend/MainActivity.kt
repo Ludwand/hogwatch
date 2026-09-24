@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         CameraScreen()
                     }
                     composable("ManualScreen") {
-                        ManualScreen()
+                        ManualScreen(navController = navController)
                     }
                 }
             }
