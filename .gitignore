@@ -5,3 +5,6 @@
 .gradle
 **/.gradle/
 **/local.properties
+*.hprof
+**/build/
+.gradle/
