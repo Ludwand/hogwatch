@@ -9,8 +9,8 @@ ALTER DATABASE dat257 OWNER TO dat257;
 CREATE TABLE Sightings (
   id SERIAL PRIMARY KEY,
   userid INTEGER NOT NULL,
-  lat INTEGER NOT NULL,
-  long INTEGER NOT NULL,
+  lat Float NOT NULL,
+  long Float NOT NULL,
   time INTEGER NOT NULL DEFAULT (extract(epoch from now()))
 );
 ALTER TABLE Sightings OWNER TO dat257;

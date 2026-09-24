@@ -1,59 +1,60 @@
 package com.example.hogwatch.backend
 
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
 import java.util.Properties
-
-import kotlin.collections.List
 import kotlin.collections.ArrayList
-/*
+import kotlin.system.exitProcess
+
 object Database {
-    private var conn: Connection by lazy {
+    private var conn: Connection
+
+    init {
         try {
-            Class.forName("org.postgresql.Driver")
-            val props: Properties = Properties()
+            val props = Properties()
             props.setProperty("user", "dat257")
             props.setProperty("password", "dat257")
-            DriverManager.getConnection("jdbc:postgresql://localhost/dat257", props)
-        } catch (e: ClassNotFoundException) {
-            System.out.println("Failed to find database driver class: " + e)
-            System.exit(1)
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost/dat257", props)
         } catch (e: SQLException) {
-            System.out.println("Failed to connect to database: " + e)
-            System.exit(2)
+            println("Failed to connect to database: $e")
+            exitProcess(2)
         }
     }
 
-    public data class Sighting(val id: Int, val userid: Int, val lat: Int, val long: Int, val time: Int)
+    public data class Sighting(val id: Int, val userid: Int, val lat: Float, val long: Float, val time: Int)
 
-    fun insertSighting(userid: Int, lat: Int, long: Int): Int? {
+    fun insertSighting(userid: Int, lat: Float, long: Float, time: Int): Int? {
         try {
-            Database.conn.prepareStatement("INSERT INTO Sightings (userid, lat, long) VALUES (?, ?, ?) RETURNING id")
-                .use { st ->
-                    st.setInteger(1, userid)
-                    st.setInteger(2, lat)
-                    st.setInteger(3, long)
-                    val rs: ResultSet = st.executeQuery()
-                    if (rs.next()) return rs.getInt(1)
-                }
+            conn.prepareStatement("INSERT INTO Sightings (userid, lat, long, time) VALUES (?, ?, ?, ?) RETURNING id").use<PreparedStatement, Unit> {
+                st ->
+                st.setInt(1, userid)
+                st.setFloat(2, lat)
+                st.setFloat(3, long)
+                st.setInt(4, time)
+                val rs: ResultSet = st.executeQuery()
+                if (rs.next()) return rs.getInt(1)
+            }
         } catch (e: SQLException) {
-            System.out.println(e)
+            println(e)
         }
         return null
     }
 
     // In the future this should be replaced by a method that filters to an area and groups nearby sightings
     fun getSightings(): Iterable<Sighting> {
-        val ret: List<Sighting> = ArrayList()
+        val ret = ArrayList<Sighting>()
         try {
-            Database.conn.prepareStatement("SELECT id, userid, lat, long, time FROM Sightings ORDER BY id")
-                .use { st ->
+            conn.prepareStatement("SELECT id, userid, lat, long, time FROM Sightings ORDER BY id")
+                .use<PreparedStatement, Unit> { st ->
                     val rs: ResultSet = st.executeQuery()
-                    while (rs.next()) ret.add(Sighting(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5)))
+                    while (rs.next()) ret.add(Sighting(rs.getInt(1), rs.getInt(2), rs.getFloat(3), rs.getFloat(4), rs.getInt(5)))
                 }
         } catch (e: SQLException) {
-            System.out.println(e)
+            println(e)
         }
         return ret
     }
 }
-*/

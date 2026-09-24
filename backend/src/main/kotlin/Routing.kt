@@ -39,7 +39,7 @@ fun Application.configureRouting() {
                 .withZone(ZoneId.systemDefault())
             val readableTime = formatter.format(instant)
             println("Servern tog emot en observation från: ${newSubmission.id} på platsen lat: ${newSubmission.lat} lon: ${newSubmission.lon} at ${readableTime}")
-            //TODO: add data to server
+            Database.insertSighting(newSubmission.id.toInt(), newSubmission.lat.toFloat(), newSubmission.lon.toFloat(), newSubmission.timeStamp.toInt())
             call.respond(HttpStatusCode.Created, "Submission successfully received!")
         }
     }

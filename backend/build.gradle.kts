@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.jvm) version "2.4.20"
     alias(ktorLibs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -21,8 +21,9 @@ dependencies {
     implementation(ktorLibs.server.core)
     implementation(ktorLibs.server.netty)
     implementation(ktorLibs.server.statusPages)
-    implementation("ch.qos.logback:logback-classic:1.4.14")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("ch.qos.logback:logback-classic:1.5.13")
+    implementation("org.jetbrains.kotlinx:dataframe-jdbc:1.0.0-rc01")
+    implementation("org.postgresql:postgresql:42.7.12")
 
     implementation(project(":shared"))
 
