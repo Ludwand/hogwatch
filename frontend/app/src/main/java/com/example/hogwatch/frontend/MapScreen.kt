@@ -12,6 +12,6 @@ fun MapScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Map Screen")
+        Text(text = "Map Screen test")
     }
 }
