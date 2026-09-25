@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
                     composable("ManualScreen") {
                         ManualScreen(navController = navController)
                     }
+                    composable("MapScreen") {
+                        MapScreen()
+                    }
                 }
             }
         }
@@ -93,6 +96,10 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(50.dp))
 
             ManualButton(navController = navController)
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            MapButton(navController = navController)
         }
     }
 }
@@ -124,6 +131,21 @@ fun ManualButton(
             .height(80.dp)
     ) {
         Text(text = "Manual Entry")
+    }
+}
+
+@Composable
+fun MapButton(
+    navController: NavController,
+    modifier: Modifier = Modifier
+    ) {
+    Button(
+        onClick = { navController.navigate("MapScreen") },
+        modifier = modifier
+            .width(240.dp)
+            .height(80.dp)
+    ) {
+        Text(text = "Map Screen")
     }
 }
 /* Function for pop-up
