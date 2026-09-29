@@ -79,10 +79,18 @@ fun ManualScreen(navController: NavController) {
 
                 // Button 3: knapp3
                 val coroutineScope = rememberCoroutineScope()
+                val userId by UserManager.getUserId()
                 Button(
                     onClick = {
+                        if (userId == null) {return@Button} //TODO: Maybe error message if Id can't be retrieved? Or can a phone send anyway?
                         coroutineScope.launch {
-                            val success = NetworkClient.manSub("12345", "57.6282764", "11.9030166", System.currentTimeMillis())
+
+                            val success = NetworkClient.submit(
+                                userId!!, //TODO: make this null-safe and remove "!!"
+                                57.6282764,
+                                11.9030166,
+                                System.currentTimeMillis(),
+                                null)
 
                             if (success) {
                                 //TODO: print that submission succeed
@@ -97,7 +105,7 @@ fun ManualScreen(navController: NavController) {
                         .width(240.dp)
                         .height(60.dp)
                 ) {
-                    Text(text = "knapp3")
+                    Text(text = "Submit")
                 }
 
                 // Status message shown when a button or date is selected

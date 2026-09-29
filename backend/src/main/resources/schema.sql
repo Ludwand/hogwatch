@@ -7,10 +7,11 @@ ALTER DATABASE dat257 OWNER TO dat257;
 \c dat257
 
 CREATE TABLE Sightings (
-  id SERIAL PRIMARY KEY,
-  userid INTEGER NOT NULL,
-  lat Float NOT NULL,
-  long Float NOT NULL,
-  time INTEGER NOT NULL DEFAULT (extract(epoch from now()))
+    id SERIAL PRIMARY KEY,
+    userid TEXT NOT NULL,
+    lat Float NOT NULL,
+    long Float NOT NULL,
+    time BIGINT NOT NULL DEFAULT (extract(epoch from now())),
+    image TEXT
 );
 ALTER TABLE Sightings OWNER TO dat257;

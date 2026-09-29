@@ -1,7 +1,7 @@
 package com.example.hogwatch.frontend
 
 import com.example.hogwatch.shared.LocalConfig
-import com.example.hogwatch.shared.ManSub
+import com.example.hogwatch.shared.Submission
 import com.example.hogwatch.shared.MapInfo
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -35,8 +35,8 @@ object NetworkClient {
         client = null
     }
 
-    suspend fun manSub(id: String, lat: String, lon: String, timeStamp: Long): Boolean {
-        val manualSubmissionSend = ManSub(id = id, lat = lat, lon = lon, timeStamp = timeStamp)
+    suspend fun submit(id: String, lat: Double, lon: Double, timeStamp: Long, image: String?): Boolean {
+        val manualSubmissionSend = Submission(id = id, lat = lat, lon = lon, timeStamp = timeStamp, image = image)
         return try {
             if (client?.isActive == true){ //client?.isActive can result in true, false or NULL. else handles false or NULL
                 val response = client?.post{
@@ -79,7 +79,7 @@ object NetworkClient {
                 }
                 if (response?.status?.isSuccess() == true){
                     val data: ArrayList<MapInfo> = response.body()
-                    println(data) //TODO: Only for testing
+                    //println(data) //TODO: Only for testing
                     data
                 } else {
                     println("Failed to fetch data")

@@ -24,16 +24,22 @@ object Database {
         }
     }
 
-    public data class Sighting(val id: Int, val userid: Int, val lat: Float, val long: Float, val time: Int)
+    public data class Sighting(val id: Int,
+                               val userid: String,
+                               val lat: Double,
+                               val long: Double,
+                               val time: Long,
+                               val image:String?)
 
-    fun insertSighting(userid: Int, lat: Float, long: Float, time: Int): Int? {
+    fun insertSighting(userid: String, lat: Double, long: Double, time: Long, image: String?): Int? {
         try {
-            conn.prepareStatement("INSERT INTO Sightings (userid, lat, long, time) VALUES (?, ?, ?, ?) RETURNING id").use<PreparedStatement, Unit> {
+            conn.prepareStatement("INSERT INTO Sightings (userid, lat, long, time, image) VALUES (?, ?, ?, ?, ?) RETURNING id").use<PreparedStatement, Unit> {
                 st ->
-                st.setInt(1, userid)
-                st.setFloat(2, lat)
-                st.setFloat(3, long)
-                st.setInt(4, time)
+                st.setString(1, userid)
+                st.setDouble(2, lat)
+                st.setDouble(3, long)
+                st.setLong(4, time)
+                st.setString(5, image)
                 val rs: ResultSet = st.executeQuery()
                 if (rs.next()) return rs.getInt(1)
             }
@@ -47,10 +53,15 @@ object Database {
     fun getSightings(): Iterable<Sighting> {
         val ret = ArrayList<Sighting>()
         try {
-            conn.prepareStatement("SELECT id, userid, lat, long, time FROM Sightings ORDER BY id")
+            conn.prepareStatement("SELECT id, userid, lat, long, time, image FROM Sightings ORDER BY id")
                 .use<PreparedStatement, Unit> { st ->
                     val rs: ResultSet = st.executeQuery()
-                    while (rs.next()) ret.add(Sighting(rs.getInt(1), rs.getInt(2), rs.getFloat(3), rs.getFloat(4), rs.getInt(5)))
+                    while (rs.next()) ret.add(Sighting(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getDouble(4),
+                        rs.getLong(5),
+                        rs.getString(6)))
                 }
         } catch (e: SQLException) {
             println(e)

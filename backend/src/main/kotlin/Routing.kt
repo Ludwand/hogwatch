@@ -9,10 +9,8 @@ import io.ktor.server.routing.*
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import com.example.hogwatch.shared.ManSub
 import com.example.hogwatch.shared.MapInfo
 import com.example.hogwatch.shared.Submission
-import com.typesafe.config.ConfigException
 
 fun Application.configureRouting() {
     routing {
@@ -21,7 +19,7 @@ fun Application.configureRouting() {
         get("/get_map_info") {
             try {
                 //TODO: retrieve data from the database
-                val sub1 = Submission(id = "19826", lat = "15.9846", lon = "-2.2941", timeStamp = System.currentTimeMillis())
+                val sub1 = Submission(id = "19826", lat = 15.9846, lon = -2.2941, timeStamp = System.currentTimeMillis(), null)
                 val subArr: ArrayList<Submission> = ArrayList()
                 subArr.add(sub1)
                 val mapInfo = MapInfo(subArr)
@@ -37,13 +35,13 @@ fun Application.configureRouting() {
 
         post("/manual_submission"){
             try {
-                val newSubmission = call.receive<ManSub>()
+                val newSubmission = call.receive<Submission>()
                 val instant = Instant.ofEpochMilli(newSubmission.timeStamp)
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(ZoneId.systemDefault())
                 val readableTime = formatter.format(instant)
-                println("Servern tog emot en observation från: ${newSubmission.id} på platsen lat: ${newSubmission.lat} lon: ${newSubmission.lon} at ${readableTime}") //TODO: remove after testing is done
-                val res = Database.insertSighting(newSubmission.id.toInt(), newSubmission.lat.toFloat(), newSubmission.lon.toFloat(), newSubmission.timeStamp.toInt())
+                println("Servern tog emot en observation från: ${newSubmission.id} på platsen lat: ${newSubmission.lat} lon: ${newSubmission.lon} at $readableTime") //TODO: remove after testing is done
+                val res = Database.insertSighting(newSubmission.id, newSubmission.lat, newSubmission.lon, newSubmission.timeStamp, newSubmission.image)
                 if (res != null){ //TODO: dubble check if the error handling is correct
                     call.respond(HttpStatusCode.Created, "Submission successfully received!")
                 } else {
