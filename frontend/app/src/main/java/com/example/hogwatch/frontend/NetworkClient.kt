@@ -2,7 +2,9 @@ package com.example.hogwatch.frontend
 
 import com.example.hogwatch.shared.LocalConfig
 import com.example.hogwatch.shared.ManSub
+import com.example.hogwatch.shared.MapInfo
 import io.ktor.client.*
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -10,6 +12,7 @@ import kotlinx.coroutines.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import kotlin.emptyArray
 
 object NetworkClient {
     private var client: HttpClient? = null
@@ -62,6 +65,38 @@ object NetworkClient {
             println("Exception: ${e.message}")
             false
         }
+    }
+
+    suspend fun getMapInfo(): List<MapInfo> {
+        return try {
+            if (client?.isActive == true){
+               val response = client!!.get {
+                    url {
+                        protocol = URLProtocol.HTTP
+                        host = LocalConfig.FRONTEND_URL
+                        port = LocalConfig.PORT
+                        path("/get_map_info")
+                    }
+                }
+                if (response.status.isSuccess()){
+                    val data: ArrayList<MapInfo> = response.body()
+                    println(data) //TODO: Only for testing
+                    data
+                } else {
+                    println("Failed to fetch data")
+                    emptyList()
+                }
+
+            } else {
+                println("Client is not active")
+                emptyList()
+            }
+
+        } catch (e: Exception){
+            println("Exception: ${e.message}")
+            emptyList()
+        }
+
     }
 }
 
