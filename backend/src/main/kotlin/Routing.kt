@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import com.example.shared.ManSub
+import com.example.hogwatch.shared.ManSub
 
 fun Application.configureRouting() {
     routing {

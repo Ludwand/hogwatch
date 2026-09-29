@@ -23,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-
 import com.example.hogwatch.frontend.theme.SrcTheme
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -31,7 +30,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
+
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UserManager.getInstance(applicationContext)
@@ -60,6 +62,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        NetworkClient.initClient()
+    }
+    //onStart()
+    //onResume()
+    //onStop()
+    //onPause()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NetworkClient.closeClient()
     }
 }
 
@@ -110,7 +122,9 @@ fun CameraButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = { navController.navigate("CameraScreen") },
+        onClick = {
+            navController.navigate("CameraScreen")
+                  },
         modifier = modifier
             .width(240.dp)
             .height(80.dp)

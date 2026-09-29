@@ -1,6 +1,6 @@
 package com.example.hogwatch.backend
 
-import com.example.shared.ManSub
+import com.example.hogwatch.shared.ManSub
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType

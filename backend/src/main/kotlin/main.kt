@@ -1,13 +1,14 @@
 package com.example.hogwatch.backend
 
+import com.example.hogwatch.shared.LocalConfig
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 
 fun main(args: Array<String>) {
     embeddedServer(
         factory = io.ktor.server.netty.Netty,
-        port = 8080,
-        host = "0.0.0.0",
+        port = LocalConfig.PORT,
+        host = LocalConfig.BACKEND_URL,
         module = Application::rootModule
     ).start(wait = true)
 }

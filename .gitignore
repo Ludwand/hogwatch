@@ -8,3 +8,6 @@
 *.hprof
 **/build/
 .gradle/
+_local_tools/*
+
+shared/src/main/kotlin/local_config.kt

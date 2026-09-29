@@ -1,5 +1,4 @@
-package com.example.shared
-
+package com.example.hogwatch.shared
 import kotlinx.serialization.Serializable
 
 @Serializable

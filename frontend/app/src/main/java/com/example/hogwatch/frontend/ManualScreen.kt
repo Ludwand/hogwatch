@@ -7,9 +7,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,8 +79,21 @@ fun ManualScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Button 3: knapp3
+                val coroutineScope = rememberCoroutineScope()
                 Button(
-                    onClick = { statusText = "Clicked knapp3" },
+                    onClick = {
+                        coroutineScope.launch {
+                            val success = NetworkClient.manSub("12345", "57.6282764", "11.9030166", System.currentTimeMillis())
+
+                            if (success) {
+                                //TODO: print that submission succeed
+                                println("Successfully submitted")
+                            } else {
+                                //TODO: print that submission failed
+                                println("Failed to submit")
+                            }
+                        }
+                         },
                     modifier = Modifier
                         .width(240.dp)
                         .height(60.dp)

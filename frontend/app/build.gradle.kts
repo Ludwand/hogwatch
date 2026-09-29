@@ -34,6 +34,7 @@ android {
         compose = true
     }
 }
+val ktor_version: String by project
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
@@ -57,4 +58,9 @@ dependencies {
     //Network related dependencies
     implementation(project(":shared"))
     implementation(ktorLibs.serialization.kotlinx.json)
+    implementation("io.ktor:ktor-client-core:${ktor_version}")
+    implementation("io.ktor:ktor-client-cio:${ktor_version}")
+    implementation("io.ktor:ktor-client-content-negotiation:${ktor_version}")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:${ktor_version}")
+
 }
