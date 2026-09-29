@@ -1,5 +1,10 @@
 package com.example.hogwatch.frontend
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -58,6 +63,12 @@ class UserManager private constructor(context: Context) {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: UserManager(context.applicationContext).also { INSTANCE = it }
             }
+        }
+        @Composable
+        fun getUserId(): State<String?> {
+            val context = LocalContext.current
+            val userManager = remember { getInstance(context) }
+            return userManager.userId.collectAsState()
         }
     }
 }

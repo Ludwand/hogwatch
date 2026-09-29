@@ -77,13 +77,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val context = LocalContext.current
-
-    // Grab singleton instance & store
-    val userManager = remember { UserManager.getInstance(context) }
-
-    // Read uuid from stream
-    val userId: String? by userManager.userId.collectAsState()
+    val userId by UserManager.getUserId()
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
