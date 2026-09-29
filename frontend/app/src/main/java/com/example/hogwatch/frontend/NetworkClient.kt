@@ -12,10 +12,9 @@ import kotlinx.coroutines.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import kotlin.emptyArray
 
 object NetworkClient {
-    private var client: HttpClient? = null
+    private var client: HttpClient? = null //Enabe client to be NULL
 
     fun initClient() {
         if (client == null) {
@@ -39,8 +38,8 @@ object NetworkClient {
     suspend fun manSub(id: String, lat: String, lon: String, timeStamp: Long): Boolean {
         val manualSubmissionSend = ManSub(id = id, lat = lat, lon = lon, timeStamp = timeStamp)
         return try {
-            if (client?.isActive == true){
-                val response = client!!.post{
+            if (client?.isActive == true){ //client?.isActive can result in true, false or NULL. else handles false or NULL
+                val response = client?.post{
                     url {
                         protocol = URLProtocol.HTTP
                         host = LocalConfig.FRONTEND_URL
@@ -50,7 +49,7 @@ object NetworkClient {
                     contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
                     setBody(manualSubmissionSend) // Add data class to body
                 }
-                if (response.status.isSuccess()) {
+                if (response?.status?.isSuccess() == true) {
                     println("Successfully submitted manual submission")
                     true
                 } else {
@@ -70,7 +69,7 @@ object NetworkClient {
     suspend fun getMapInfo(): List<MapInfo> {
         return try {
             if (client?.isActive == true){
-               val response = client!!.get {
+               val response = client?.get {
                     url {
                         protocol = URLProtocol.HTTP
                         host = LocalConfig.FRONTEND_URL
@@ -78,7 +77,7 @@ object NetworkClient {
                         path("/get_map_info")
                     }
                 }
-                if (response.status.isSuccess()){
+                if (response?.status?.isSuccess() == true){
                     val data: ArrayList<MapInfo> = response.body()
                     println(data) //TODO: Only for testing
                     data

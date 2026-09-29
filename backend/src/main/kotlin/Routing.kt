@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 import com.example.hogwatch.shared.ManSub
 import com.example.hogwatch.shared.MapInfo
 import com.example.hogwatch.shared.Submission
+import com.typesafe.config.ConfigException
 
 fun Application.configureRouting() {
     routing {
@@ -29,6 +30,7 @@ fun Application.configureRouting() {
 
             } catch (e: Exception) {
                 println("Exception ${e.message}")
+                call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
             }
 
         }
@@ -40,11 +42,17 @@ fun Application.configureRouting() {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(ZoneId.systemDefault())
                 val readableTime = formatter.format(instant)
-                println("Servern tog emot en observation från: ${newSubmission.id} på platsen lat: ${newSubmission.lat} lon: ${newSubmission.lon} at ${readableTime}")
-                Database.insertSighting(newSubmission.id.toInt(), newSubmission.lat.toFloat(), newSubmission.lon.toFloat(), newSubmission.timeStamp.toInt())
-                call.respond(HttpStatusCode.Created, "Submission successfully received!")
+                println("Servern tog emot en observation från: ${newSubmission.id} på platsen lat: ${newSubmission.lat} lon: ${newSubmission.lon} at ${readableTime}") //TODO: remove after testing is done
+                val res = Database.insertSighting(newSubmission.id.toInt(), newSubmission.lat.toFloat(), newSubmission.lon.toFloat(), newSubmission.timeStamp.toInt())
+                if (res != null){ //TODO: dubble check if the error handling is correct
+                    call.respond(HttpStatusCode.Created, "Submission successfully received!")
+                } else {
+                    call.respond(HttpStatusCode.InternalServerError, "Submission could not be saved on the database!")
+                }
+
             } catch (e: Exception) {
                 println("Exception ${e.message}")
+                call.respond(HttpStatusCode.BadRequest, "Problem occurred!")
             }
 
         }
