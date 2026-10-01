@@ -89,7 +89,7 @@ fun ManualScreen(navController: NavController) {
                                 userId!!, //TODO: make this null-safe and remove "!!"
                                 57.6282764,
                                 11.9030166,
-                                System.currentTimeMillis(),
+                                System.currentTimeMillis() / 1000L,
                                 null)
 
                             if (success) {

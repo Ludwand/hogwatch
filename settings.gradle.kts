@@ -1,5 +1,5 @@
 rootProject.name = "HogWatch"
-
+//https://docs.gradle.org/current/userguide/multi_project_builds.html
 include(":backend")
 include(":frontend:app")
 include(":shared")
@@ -30,6 +30,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
     versionCatalogs {
-        create("ktorLibs").from("io.ktor:ktor-version-catalog:3.5.2")
+        create("ktorLibs").from("io.ktor:ktor-version-catalog:3.6.0")
     }
 }

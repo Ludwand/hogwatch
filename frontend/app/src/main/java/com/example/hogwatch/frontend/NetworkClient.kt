@@ -14,7 +14,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object NetworkClient {
-    private var client: HttpClient? = null //Enabe client to be NULL
+    private var client: HttpClient? = null //? enable client to be NULL
 
     fun initClient() {
         if (client == null) {
@@ -44,7 +44,7 @@ object NetworkClient {
                         protocol = URLProtocol.HTTP
                         host = LocalConfig.FRONTEND_URL
                         port = LocalConfig.PORT
-                        path("/manual_submission")
+                        path("/submission")
                     }
                     contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
                     setBody(manualSubmissionSend) // Add data class to body

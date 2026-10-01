@@ -6,13 +6,13 @@ plugins {
 android {
     namespace = "com.example.hogwatch.frontend"
     compileSdk {
-        version = release(36)
+        version = release(libs.versions.android.compileSdk.get().toInt())
     }
 
     defaultConfig {
         applicationId = "com.example.hogwatch"
-        minSdk = 24
-        targetSdk = 37
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -26,15 +26,15 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
+
     buildFeatures {
         compose = true
     }
 }
-val ktor_version: String by project
+
+kotlin {
+    jvmToolchain(libs.versions.java.get().toInt())
+}
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
     testImplementation(libs.junit)
-    //androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
@@ -58,9 +57,7 @@ dependencies {
     //Network related dependencies
     implementation(project(":shared"))
     implementation(ktorLibs.serialization.kotlinx.json)
-    implementation("io.ktor:ktor-client-core:${ktor_version}")
-    implementation("io.ktor:ktor-client-cio:${ktor_version}")
-    implementation("io.ktor:ktor-client-content-negotiation:${ktor_version}")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:${ktor_version}")
-
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
 }

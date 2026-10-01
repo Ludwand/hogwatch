@@ -19,7 +19,12 @@ fun Application.configureRouting() {
         get("/get_map_info") {
             try {
                 //TODO: retrieve data from the database
-                val sub1 = Submission(id = "19826", lat = 15.9846, lon = -2.2941, timeStamp = System.currentTimeMillis(), null)
+                val sub1 = Submission(
+                    id = "19826",
+                    lat = 15.9846,
+                    lon = -2.2941,
+                    timeStamp = System.currentTimeMillis(),
+                    null)
                 val subArr: ArrayList<Submission> = ArrayList()
                 subArr.add(sub1)
                 val mapInfo = MapInfo(subArr)
@@ -33,10 +38,10 @@ fun Application.configureRouting() {
 
         }
 
-        post("/manual_submission"){
+        post("/submission"){
             try {
                 val newSubmission = call.receive<Submission>()
-                val instant = Instant.ofEpochMilli(newSubmission.timeStamp)
+                val instant = Instant.ofEpochSecond(newSubmission.timeStamp)
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(ZoneId.systemDefault())
                 val readableTime = formatter.format(instant)

@@ -1,15 +1,22 @@
 [versions]
-agp = "9.1.0"
-coreKtx = "1.13.1"
+agp = "9.1.1"
+coreKtx = "1.19.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.8.6"
+lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
-kotlin = "2.2.10"
-composeBom = "2026.02.01"
+kotlin = "2.4.20"
+composeBom = "2026.09.00"
 datastore = "1.2.1"
-logback = "1.4.14"
+logback = "1.6.5"
+java = "17"
+postgres = "42.7.13"
+dataframe = "1.0.0-rc01"
+ktor = "3.6.0"
+android-minSdk = "24"
+android-targetSdk = "37"
+android-compileSdk = "37"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,9 +33,14 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.8.0" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.10.2" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+postgres = {module = "org.postgresql:postgresql", version.ref = "postgres"}
+dataframe = {module = "org.jetbrains.kotlinx:dataframe-jdbc", version.ref = "dataframe"}
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 
 
 [plugins]
@@ -39,3 +51,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 
 
 
+[bundles]
