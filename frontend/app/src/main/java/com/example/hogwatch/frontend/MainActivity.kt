@@ -1,5 +1,7 @@
 package com.example.hogwatch.frontend
 
+//import android.app.AlertDialog
+import androidx.compose.material3.AlertDialog
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import android.os.Bundle
@@ -20,8 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.hogwatch.frontend.theme.SrcTheme
 import androidx.compose.ui.unit.dp
@@ -78,6 +83,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(navController: NavController) {
     val userId by UserManager.getUserId()
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -106,6 +112,11 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(50.dp))
 
             MapButton(navController = navController)
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            InfoButton()
+
         }
     }
 }
@@ -156,22 +167,40 @@ fun MapButton(
         Text(text = "Map Screen")
     }
 }
-/* Function for pop-up
+@Composable
+fun InfoButton(modifier: Modifier = Modifier) {
+    var showDialog by remember { mutableStateOf(false) }
+
+        Button(
+            onClick = { showDialog = true },
+            modifier = Modifier
+                .width(240.dp)
+                .height(80.dp)
+        ) {
+            Text(text = "Click Me")
+        }
+
+        if (showDialog) {
+            HedgehogInfoPopup(onDismiss = { showDialog = false }) //varför får jag inte kalla en funktion direkt i min onClick lambda?!?!?!?!?!?
+        }
+    }
+
+
 @Composable
 fun HedgehogInfoPopup(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Jag hatar Kotlin") },
-        text = { Text(text = "Jag vill inte leka med Kotlin längre") },
+        title = { Text(text = "Respect the Hedgehog") },
+        text = { Text(text = "Do not attempt to move or wake up a hedgehog to get a better photo") },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("OK")
+                Text("I Understand")
             }
         },
-        dismissButton = {
+        /*dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("Cancel")
             }
-        }
+        }*/
     )
-} */
+}
