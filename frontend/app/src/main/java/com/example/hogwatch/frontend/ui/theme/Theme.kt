@@ -1,4 +1,4 @@
-package com.example.hogwatch.frontend.theme
+package com.example.hogwatch.frontend.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

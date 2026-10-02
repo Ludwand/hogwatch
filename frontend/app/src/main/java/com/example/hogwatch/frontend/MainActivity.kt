@@ -23,18 +23,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import com.example.hogwatch.frontend.theme.SrcTheme
+import com.example.hogwatch.frontend.ui.theme.SrcTheme
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
+import com.example.hogwatch.frontend.data.remote.NetworkClient
+//import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
+import com.example.hogwatch.frontend.ui.map.MapScreen
+import com.example.hogwatch.frontend.data.repository.UserManager
+import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController = navController)
                     }
                     composable("CameraScreen") {
-                        CameraScreen()
+                        //CameraScreen()
                     }
                     composable("ManualScreen") {
                         ManualScreen(navController = navController)

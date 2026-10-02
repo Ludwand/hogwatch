@@ -1,4 +1,4 @@
-package com.example.hogwatch.frontend
+package com.example.hogwatch.frontend.data.repository
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

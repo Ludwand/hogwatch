@@ -1,14 +1,14 @@
-package com.example.hogwatch.frontend
+package com.example.hogwatch.frontend.ui.camerasubmission
 import android.Manifest
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
+//import androidx.camera.core.CameraSelector
+//import androidx.camera.core.ImageCapture
+//import androidx.camera.core.ImageCaptureException
+//import androidx.camera.core.Preview
+//import androidx.camera.lifecycle.ProcessCameraProvider
+//import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -33,6 +33,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.io.File
+/*
 @Composable
 fun CameraScreen() {
     val context = LocalContext.current
@@ -140,4 +141,4 @@ private fun takePhoto(
             }
         }
     )
-}
+}*/

@@ -1,4 +1,4 @@
-package com.example.hogwatch.frontend
+package com.example.hogwatch.frontend.data.remote
 
 import com.example.hogwatch.shared.LocalConfig
 import com.example.hogwatch.shared.Submission

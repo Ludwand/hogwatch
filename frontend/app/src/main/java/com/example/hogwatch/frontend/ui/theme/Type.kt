@@ -1,4 +1,4 @@
-package com.example.hogwatch.frontend.theme
+package com.example.hogwatch.frontend.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

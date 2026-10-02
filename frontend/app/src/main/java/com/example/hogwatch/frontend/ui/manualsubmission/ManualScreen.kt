@@ -1,4 +1,4 @@
-package com.example.hogwatch.frontend
+package com.example.hogwatch.frontend.ui.manualsubmission
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.hogwatch.frontend.data.remote.NetworkClient
+import com.example.hogwatch.frontend.data.repository.UserManager
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
