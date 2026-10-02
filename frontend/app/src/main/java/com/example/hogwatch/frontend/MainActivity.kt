@@ -33,7 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hogwatch.frontend.data.remote.NetworkClient
-//import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
+import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
 import com.example.hogwatch.frontend.data.repository.UserManager
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController = navController)
                     }
                     composable("CameraScreen") {
-                        //CameraScreen()
+                        CameraScreen()
                     }
                     composable("ManualScreen") {
                         ManualScreen(navController = navController)
