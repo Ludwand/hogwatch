@@ -66,7 +66,7 @@ object NetworkClient {
         }
     }
 
-    suspend fun getMapInfo(): List<MapInfo> {
+    suspend fun getMapInfo(): MapInfo {
         return try {
             if (client?.isActive == true){
                val response = client?.get {
@@ -78,22 +78,22 @@ object NetworkClient {
                     }
                 }
                 if (response?.status?.isSuccess() == true){
-                    val data: ArrayList<MapInfo> = response.body()
+                    val data: MapInfo = response.body()
                     //println(data) //TODO: Only for testing
                     data
                 } else {
                     println("Failed to fetch data")
-                    emptyList()
+                    MapInfo()
                 }
 
             } else {
                 println("Client is not active")
-                emptyList()
+                MapInfo()
             }
 
         } catch (e: Exception){
             println("Exception: ${e.message}")
-            emptyList()
+            MapInfo()
         }
 
     }

@@ -9,5 +9,6 @@
 **/build/
 .gradle/
 _local_tools/*
+secrets.properties
 
 shared/src/main/kotlin/local_config.kt

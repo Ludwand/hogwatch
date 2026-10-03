@@ -19,16 +19,25 @@ fun Application.configureRouting() {
         get("/get_map_info") {
             try {
                 //TODO: retrieve data from the database
+                val subArr: ArrayList<Submission> = ArrayList()
+
                 val sub1 = Submission(
                     id = "19826",
                     lat = 15.9846,
                     lon = -2.2941,
                     timeStamp = System.currentTimeMillis(),
                     null)
-                val subArr: ArrayList<Submission> = ArrayList()
                 subArr.add(sub1)
-                val mapInfo = MapInfo(subArr)
 
+                val sub2 = Submission(
+                    id = "1",
+                    lat = 57.71,
+                    lon = 11.97,
+                    timeStamp = System.currentTimeMillis(),
+                    null)
+                subArr.add(sub2)
+
+                val mapInfo = MapInfo(subArr)
                 call.respond(mapInfo)
 
             } catch (e: Exception) {
