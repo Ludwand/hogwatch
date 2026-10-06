@@ -2,6 +2,7 @@ package com.example.hogwatch.frontend.ui.camerasubmission
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -24,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,12 +35,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.hogwatch.frontend.data.remote.NetworkClient
+import com.example.hogwatch.frontend.data.repository.UserManager
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
 fun CameraScreen() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val userId by UserManager.getUserId()
+    val coroutineScope = rememberCoroutineScope()
 
     // Initialize state by checking if permission is ALREADY granted
     var hasCameraPermission by remember {
@@ -98,8 +105,29 @@ fun CameraScreen() {
             //take photo button
             IconButton(
                 onClick = {
-                    takePhoto(context, imageCapture) { savedFile ->
-                        // how do we want to store images?
+                    // userId null check
+                    val currentUserId = userId
+                    if (currentUserId == null) {
+                        println("Error: User ID is null")
+                        return@IconButton
+                    }
+
+                    takePhoto(context, imageCapture) { base64Image ->
+                        coroutineScope.launch {
+                            val success = NetworkClient.submit(
+                                id = currentUserId,
+                                lat = 57.6282764,       // test data before location request is implemented
+                                lon = 11.9030166,       // test data before location request is implemented
+                                timeStamp = System.currentTimeMillis() / 1000L,
+                                image = base64Image
+                            )
+
+                            if (success) {
+                                println("Successfully submitted photo!")
+                            } else {
+                                println("Failed to submit photo.")
+                            }
+                        }
                     }
                 },
                 modifier = Modifier
@@ -120,13 +148,13 @@ fun CameraScreen() {
 
 /*
 * Captures a JPEG photo asynchronously using CameraX
-* Converts the file into raw binary [ByteArray]
-* Returns binary
+* Converts the file into Base64
+* Returns base64Image
 * */
 private fun takePhoto(
     context: Context,
     imageCapture: ImageCapture,
-    onPhotoCaptured: (ByteArray) -> Unit
+    onPhotoCaptured: (String) -> Unit
 ) {
     val photoFile = File(context.cacheDir, "captured_photo_${System.currentTimeMillis()}.jpg")
     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -141,8 +169,10 @@ private fun takePhoto(
                 //cleanup
                 photoFile.delete()
 
+                val base64Image = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
+
                 //return
-                onPhotoCaptured(imageBytes)
+                onPhotoCaptured(base64Image)
             }
 
             override fun onError(exception: ImageCaptureException) {
