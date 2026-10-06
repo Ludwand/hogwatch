@@ -38,6 +38,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.maps.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -67,6 +68,11 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
+
+    implementation(libs.androidx.compose.material.icons)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
 }
 
 secrets {

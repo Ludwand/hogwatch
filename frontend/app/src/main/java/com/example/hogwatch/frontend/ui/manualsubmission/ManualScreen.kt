@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.hogwatch.frontend.data.remote.NetworkClient
+//import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.data.repository.UserManager
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -87,20 +88,20 @@ fun ManualScreen(navController: NavController) {
                         if (userId == null) {return@Button} //TODO: Maybe error message if Id can't be retrieved? Or can a phone send anyway?
                         coroutineScope.launch {
 
-                            val success = NetworkClient.submit(
-                                userId!!, //TODO: make this null-safe and remove "!!"
-                                57.6282764,
-                                11.9030166,
-                                System.currentTimeMillis() / 1000L,
-                                null)
-
-                            if (success) {
-                                //TODO: print that submission succeed
-                                println("Successfully submitted")
-                            } else {
-                                //TODO: print that submission failed
-                                println("Failed to submit")
-                            }
+//                            val success = SightingRepository.submit(
+//                                userId!!, //TODO: make this null-safe and remove "!!"
+//                                57.6282764,
+//                                11.9030166,
+//                                System.currentTimeMillis() / 1000L,
+//                                null)
+//
+//                            if (success) {
+//                                //TODO: print that submission succeed
+//                                println("Successfully submitted")
+//                            } else {
+//                                //TODO: print that submission failed
+//                                println("Failed to submit")
+//                            }
                         }
                          },
                     modifier = Modifier
