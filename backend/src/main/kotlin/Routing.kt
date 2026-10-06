@@ -11,6 +11,19 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.example.hogwatch.shared.MapInfo
 import com.example.hogwatch.shared.Submission
+import io.ktor.server.plugins.origin
+
+const val MIN_SUBMISSION_DELAY = 60 * 1000L
+
+object LatestSubmission {
+    private var data = HashMap<String, Long>()
+
+    fun canSubmit(addr: String): Boolean {
+        val now = System.currentTimeMillis()
+        val old = data.put(addr, now)
+        return old == null || now - old > MIN_SUBMISSION_DELAY
+    }
+}
 
 fun Application.configureRouting() {
     routing {
@@ -44,11 +57,16 @@ fun Application.configureRouting() {
                 println("Exception ${e.message}")
                 call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
             }
-
         }
 
         post("/submission"){
             try {
+                if (!LatestSubmission.canSubmit(call.request.origin.remoteAddress)) {
+                    println("Rejected submission from ${call.request.origin.remoteAddress}")
+                    call.respond(HttpStatusCode.TooManyRequests, "You are sending submissions too frequently.")
+                    return@post
+                }
+
                 val newSubmission = call.receive<Submission>()
                 val instant = Instant.ofEpochSecond(newSubmission.timeStamp)
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
@@ -61,12 +79,10 @@ fun Application.configureRouting() {
                 } else {
                     call.respond(HttpStatusCode.InternalServerError, "Submission could not be saved on the database!")
                 }
-
             } catch (e: Exception) {
                 println("Exception ${e.message}")
                 call.respond(HttpStatusCode.BadRequest, "Problem occurred!")
             }
-
         }
     }
 }
