@@ -20,6 +20,7 @@ object Database {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost/dat257", props)
         } catch (e: SQLException) {
             println("Failed to connect to database: $e")
+            println("Have you ran the setup script schema.sql?")
             exitProcess(2)
         }
     }
