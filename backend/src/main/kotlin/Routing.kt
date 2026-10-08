@@ -9,8 +9,8 @@ import io.ktor.server.routing.*
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import com.example.hogwatch.shared.MapInfo
-import com.example.hogwatch.shared.Submission
+import com.example.hogwatch.shared.Sighting
+import com.example.hogwatch.shared.Sightings
 import io.ktor.server.plugins.origin
 
 const val MIN_SUBMISSION_DELAY = 60 * 1000L
@@ -32,9 +32,9 @@ fun Application.configureRouting() {
         get("/get_map_info") {
             try {
                 //TODO: retrieve data from the database
-                val subArr: ArrayList<Submission> = ArrayList()
+                val subArr: ArrayList<Sighting> = ArrayList()
 
-                val sub1 = Submission(
+                val sub1 = Sighting(
                     id = "19826",
                     lat = 15.9846,
                     lon = -2.2941,
@@ -42,7 +42,7 @@ fun Application.configureRouting() {
                     null)
                 subArr.add(sub1)
 
-                val sub2 = Submission(
+                val sub2 = Sighting(
                     id = "1",
                     lat = 57.71,
                     lon = 11.97,
@@ -50,7 +50,7 @@ fun Application.configureRouting() {
                     null)
                 subArr.add(sub2)
 
-                val mapInfo = MapInfo(subArr)
+                val mapInfo = Sightings(subArr)
                 call.respond(mapInfo)
 
             } catch (e: Exception) {
@@ -67,7 +67,7 @@ fun Application.configureRouting() {
                     return@post
                 }
 
-                val newSubmission = call.receive<Submission>()
+                val newSubmission = call.receive<Sighting>()
                 val instant = Instant.ofEpochSecond(newSubmission.timeStamp)
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(ZoneId.systemDefault())

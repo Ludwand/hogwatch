@@ -31,7 +31,7 @@ object Database {
                                val time: Long,
                                val image:String?)
 
-    fun insertSighting(userid: String, lat: Double, long: Double, time: Long, image: String?): Int? {
+    fun insertSighting(userid: String?, lat: Double, long: Double, time: Long, image: String?): Int? {
         try {
             conn.prepareStatement("INSERT INTO Sightings (userid, lat, long, time, image) VALUES (?, ?, ?, ?, ?) RETURNING id").use<PreparedStatement, Unit> {
                 st ->

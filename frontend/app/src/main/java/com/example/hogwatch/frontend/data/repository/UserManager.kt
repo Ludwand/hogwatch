@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,33 +29,24 @@ class UserManager private constructor(context: Context) {
     private val dataStore = context.applicationContext.dataStore
     private val USER_ID_KEY = stringPreferencesKey("app_user_id") //enforce app_user_id as string
 
-    private val _userId = MutableStateFlow<String?>(null)
-    val userId: StateFlow<String?> = _userId.asStateFlow()
 
-    init {
-        CoroutineScope(Dispatchers.IO).launch { //Avoids running IO-blocking on main thread
-            val id = getOrCreateUserId()
-            _userId.value = id
-        }
+    val userIdFlow: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[USER_ID_KEY]
     }
 
-    private suspend fun getOrCreateUserId(): String {
-        val existingId = dataStore.data
-            .map { prefs -> prefs[USER_ID_KEY] }
-            .first()
-
-        if (existingId != null) return existingId
+    suspend fun getUserId(): String {
+        val existingId = dataStore.data.map { it[USER_ID_KEY] }.first()
+        if (existingId != null) {
+            return existingId
+        }
 
         val newId = UUID.randomUUID().toString()
-        dataStore.edit { prefs ->
-            prefs[USER_ID_KEY] = newId
+        dataStore.edit { preferences ->
+            preferences[USER_ID_KEY] = newId
         }
         return newId
     }
 
-    /*
-    * companion object contains functions and properties tied to the class itself rather than a specific instance
-    */
     companion object {
         @Volatile
         private var INSTANCE: UserManager? = null
@@ -63,12 +55,6 @@ class UserManager private constructor(context: Context) {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: UserManager(context.applicationContext).also { INSTANCE = it }
             }
-        }
-        @Composable
-        fun getUserId(): State<String?> {
-            val context = LocalContext.current
-            val userManager = remember { getInstance(context) }
-            return userManager.userId.collectAsState()
         }
     }
 }

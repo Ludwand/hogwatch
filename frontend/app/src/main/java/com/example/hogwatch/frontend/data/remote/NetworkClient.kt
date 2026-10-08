@@ -1,8 +1,8 @@
 package com.example.hogwatch.frontend.data.remote
 
 import com.example.hogwatch.shared.LocalConfig
-import com.example.hogwatch.shared.Submission
-import com.example.hogwatch.shared.MapInfo
+import com.example.hogwatch.shared.Sighting
+import com.example.hogwatch.shared.Sightings
 import io.ktor.client.*
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
@@ -35,8 +35,7 @@ object NetworkClient {
         client = null
     }
 
-    suspend fun submit(id: String, lat: Double, lon: Double, timeStamp: Long, image: String?): Boolean {
-        val manualSubmissionSend = Submission(id = id, lat = lat, lon = lon, timeStamp = timeStamp, image = image)
+    suspend fun sendSightingToServer(submission: Sighting): Boolean {
         return try {
             if (client?.isActive == true){ //client?.isActive can result in true, false or NULL. else handles false or NULL
                 val response = client?.post{
@@ -47,7 +46,7 @@ object NetworkClient {
                         path("/submission")
                     }
                     contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
-                    setBody(manualSubmissionSend) // Add data class to body
+                    setBody(submission) // Add data class to body
                 }
                 if (response?.status?.isSuccess() == true) {
                     println("Successfully submitted manual submission")
@@ -66,7 +65,7 @@ object NetworkClient {
         }
     }
 
-    suspend fun getMapInfo(): MapInfo {
+    suspend fun getMapInfo(): Sightings {
         return try {
             if (client?.isActive == true){
                val response = client?.get {
@@ -78,22 +77,22 @@ object NetworkClient {
                     }
                 }
                 if (response?.status?.isSuccess() == true){
-                    val data: MapInfo = response.body()
+                    val data: Sightings = response.body()
                     //println(data) //TODO: Only for testing
                     data
                 } else {
                     println("Failed to fetch data")
-                    MapInfo()
+                    Sightings()
                 }
 
             } else {
                 println("Client is not active")
-                MapInfo()
+                Sightings()
             }
 
         } catch (e: Exception){
             println("Exception: ${e.message}")
-            MapInfo()
+            Sightings()
         }
 
     }

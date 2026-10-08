@@ -11,7 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.hogwatch.frontend.data.remote.NetworkClient
-import com.example.hogwatch.shared.MapInfo
+import com.example.hogwatch.shared.Sightings
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MapScreen()
 {
-    val data = remember { mutableStateOf(MapInfo()) }
+    val data = remember { mutableStateOf(Sightings()) }
 
     LaunchedEffect(Unit) {
         data.value = NetworkClient.getMapInfo()

@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.hogwatch.frontend.R
 import com.example.hogwatch.frontend.ui.navigation.MenuPlaceHolder
 
-
+//https://www.imageonlinetools.com/frutiger-aero-icon-generator
 @Composable
 fun HomeScreen(
     onNavigateToManualReport: () -> Unit,

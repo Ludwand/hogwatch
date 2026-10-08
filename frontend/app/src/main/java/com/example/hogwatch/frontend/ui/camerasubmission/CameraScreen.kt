@@ -35,16 +35,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.example.hogwatch.frontend.data.remote.NetworkClient
-import com.example.hogwatch.frontend.data.repository.UserManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hogwatch.frontend.data.repository.SightingRepository
 import kotlinx.coroutines.launch
+
 import java.io.File
 
 @Composable
-fun CameraScreen() {
+fun CameraScreen(
+    viewModel: CameraViewModel = viewModel()
+) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val userId by UserManager.getUserId()
     val coroutineScope = rememberCoroutineScope()
 
     // Initialize state by checking if permission is ALREADY granted
@@ -106,7 +111,7 @@ fun CameraScreen() {
             IconButton(
                 onClick = {
                     // userId null check
-                    val currentUserId = userId
+                    val currentUserId = uiState.userId //TODO: Move this to viewmodel
                     if (currentUserId == null) {
                         println("Error: User ID is null")
                         return@IconButton
@@ -114,7 +119,7 @@ fun CameraScreen() {
 
                     takePhoto(context, imageCapture) { base64Image ->
                         coroutineScope.launch {
-                            val success = NetworkClient.submit(
+                            val success = SightingRepository.submit(
                                 id = currentUserId,
                                 lat = 57.6282764,       // test data before location request is implemented
                                 lon = 11.9030166,       // test data before location request is implemented
@@ -146,12 +151,20 @@ fun CameraScreen() {
     }
 }
 
+
+@Composable
+fun CameraContent(){ //TODO: add stateless view-code
+
+}
+
 /*
 * Captures a JPEG photo asynchronously using CameraX
 * Converts the file into Base64
 * Returns base64Image
 * */
-private fun takePhoto(
+
+
+fun takePhoto(
     context: Context,
     imageCapture: ImageCapture,
     onPhotoCaptured: (String) -> Unit
