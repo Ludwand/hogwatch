@@ -5,6 +5,8 @@ import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 
 fun main(args: Array<String>) {
+    Database
+
     embeddedServer(
         factory = io.ktor.server.netty.Netty,
         port = LocalConfig.PORT,
