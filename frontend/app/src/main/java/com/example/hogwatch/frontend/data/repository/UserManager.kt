@@ -1,4 +1,5 @@
 package com.example.hogwatch.frontend.data.repository
+
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,37 +25,37 @@ private val Context.dataStore by preferencesDataStore(name = "user_Settings")
 
 //private constructor = singleton
 class UserManager private constructor(context: Context) {
-    //context is like a "handle" needed to open local device storage
-    // Store only the DataStore instance, NOT the Context itself
-    private val dataStore = context.applicationContext.dataStore
-    private val USER_ID_KEY = stringPreferencesKey("app_user_id") //enforce app_user_id as string
+   //context is like a "handle" needed to open local device storage
+   // Store only the DataStore instance, NOT the Context itself
+   private val dataStore = context.applicationContext.dataStore
+   private val USER_ID_KEY = stringPreferencesKey("app_user_id") //enforce app_user_id as string
 
 
-    val userIdFlow: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[USER_ID_KEY]
-    }
+   val userIdFlow: Flow<String?> = dataStore.data.map { preferences ->
+      preferences[USER_ID_KEY]
+   }
 
-    suspend fun getUserId(): String {
-        val existingId = dataStore.data.map { it[USER_ID_KEY] }.first()
-        if (existingId != null) {
-            return existingId
-        }
+   suspend fun getUserId(): String {
+      val existingId = dataStore.data.map { it[USER_ID_KEY] }.first()
+      if (existingId != null) {
+         return existingId
+      }
 
-        val newId = UUID.randomUUID().toString()
-        dataStore.edit { preferences ->
-            preferences[USER_ID_KEY] = newId
-        }
-        return newId
-    }
+      val newId = UUID.randomUUID().toString()
+      dataStore.edit { preferences ->
+         preferences[USER_ID_KEY] = newId
+      }
+      return newId
+   }
 
-    companion object {
-        @Volatile
-        private var INSTANCE: UserManager? = null
+   companion object {
+      @Volatile
+      private var INSTANCE: UserManager? = null
 
-        fun getInstance(context: Context): UserManager {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: UserManager(context.applicationContext).also { INSTANCE = it }
-            }
-        }
-    }
+      fun getInstance(context: Context): UserManager {
+         return INSTANCE ?: synchronized(this) {
+            INSTANCE ?: UserManager(context.applicationContext).also { INSTANCE = it }
+         }
+      }
+   }
 }

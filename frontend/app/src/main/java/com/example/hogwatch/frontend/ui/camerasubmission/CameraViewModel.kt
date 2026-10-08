@@ -8,21 +8,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-data class CameraUiState (
-    val date: String = "",
-    val time: String = "",
-    val userId: String = ""
-    //TODO:ersätt med riktiga states för kamera
+data class CameraUiState(
+   val date: String = "",
+   val time: String = "",
+   val userId: String = ""
+   //TODO:ersätt med riktiga states för kamera
 )
 
-class CameraViewModel(application: Application) : AndroidViewModel(application){
-    private val userManager = UserManager.getInstance(application)
+class CameraViewModel(application: Application) : AndroidViewModel(application) {
+   private val userManager = UserManager.getInstance(application)
 
-    private val _uiState = MutableStateFlow(CameraUiState())
-    val uiState: StateFlow<CameraUiState> = _uiState.asStateFlow()
+   private val _uiState = MutableStateFlow(CameraUiState())
+   val uiState: StateFlow<CameraUiState> = _uiState.asStateFlow()
 
-    suspend fun onSubmit(){
-        val state = _uiState.value
-        val userId = userManager.getUserId()
-    }
+   suspend fun onSubmit() {
+      val state = _uiState.value
+      val userId = userManager.getUserId()
+   }
 }

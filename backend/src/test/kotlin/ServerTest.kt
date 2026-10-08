@@ -13,52 +13,59 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.*
+
 //import com.example.hogwatch.shared.ManSub
 
 class ServerTest {
 
-    @Test
-    fun `test root endpoint`() = testApplication {
-        application {
-            rootModule()
-        }
-        // verify server root returns 200
-        assertEquals(HttpStatusCode.OK, client.get("/").status)
+   @Test
+   fun `test root endpoint`() = testApplication {
+      application {
+         rootModule()
+      }
+      // verify server root returns 200
+      assertEquals(HttpStatusCode.OK, client.get("/").status)
 
-    }
-    @Test
-    fun `test new endpoint`() = testApplication {
-        application {
-            rootModule() // Startar en helt ny, isolerad server för detta test
-        }
-        val response = client.get("/test1")
+   }
 
-        assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("plain", response.contentType()?.contentSubtype)
-        assertContains(response.bodyAsText(), "Hello From Ktor")
-    }
+   @Test
+   fun `test new endpoint`() = testApplication {
+      application {
+         rootModule() // Startar en helt ny, isolerad server för detta test
+      }
+      val response = client.get("/test1")
 
-    @Test
-    fun `Manual Submission`() = testApplication {
-        application{
-            rootModule()
-        }
+      assertEquals(HttpStatusCode.OK, response.status)
+      assertEquals("plain", response.contentType()?.contentSubtype)
+      assertContains(response.bodyAsText(), "Hello From Ktor")
+   }
 
-        val client = createClient { //Creating JSON support
-            install(ContentNegotiation) {
-                json()
-            }
-        }
+   @Test
+   fun `Manual Submission`() = testApplication {
+      application {
+         rootModule()
+      }
 
-        val manualSubmissionSend = ManSub(id = "123", lat = "57.6282764", lon = "11.9030166", timeStamp = System.currentTimeMillis())
+      val client = createClient { //Creating JSON support
+         install(ContentNegotiation) {
+            json()
+         }
+      }
 
-        val response = client.post("/manual_submission") {
-            contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
-            setBody(manualSubmissionSend) // Add data class to body
-        }
-        assertEquals(HttpStatusCode.Created, response.status)
-        assertEquals("Submission successfully received!", response.bodyAsText())
-    }
+      val manualSubmissionSend = ManSub(
+         id = "123",
+         lat = "57.6282764",
+         lon = "11.9030166",
+         timeStamp = System.currentTimeMillis()
+      )
+
+      val response = client.post("/manual_submission") {
+         contentType(ContentType.Application.Json) // Tell the server that the following content will be JSON
+         setBody(manualSubmissionSend) // Add data class to body
+      }
+      assertEquals(HttpStatusCode.Created, response.status)
+      assertEquals("Submission successfully received!", response.bodyAsText())
+   }
 }
 
 /*

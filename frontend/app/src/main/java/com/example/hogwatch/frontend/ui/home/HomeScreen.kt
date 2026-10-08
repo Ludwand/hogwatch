@@ -35,130 +35,132 @@ import com.example.hogwatch.frontend.ui.navigation.HomeMenu
 //https://www.imageonlinetools.com/frutiger-aero-icon-generator
 @Composable
 fun HomeScreen(
-    onNavigateToManualReport: () -> Unit,
-    onNavigateToCameraReport: () -> Unit,
-    onNavigateToMap: () -> Unit,
-    onNavigateToInfo: () -> Unit,
-    onNavigateToAbout: () -> Unit
+   onNavigateToManualReport: () -> Unit,
+   onNavigateToCameraReport: () -> Unit,
+   onNavigateToMap: () -> Unit,
+   onNavigateToInfo: () -> Unit,
+   onNavigateToAbout: () -> Unit
 ) {
-    HomeScreenContent(
-        onManualReportClick = onNavigateToManualReport,
-        onCameraReportClick = onNavigateToCameraReport,
-        onMapClick = onNavigateToMap,
-        onInfoClick = onNavigateToInfo,
-        onAboutClick = onNavigateToAbout
-    )
+   HomeScreenContent(
+      onManualReportClick = onNavigateToManualReport,
+      onCameraReportClick = onNavigateToCameraReport,
+      onMapClick = onNavigateToMap,
+      onInfoClick = onNavigateToInfo,
+      onAboutClick = onNavigateToAbout
+   )
 }
 
 @Composable
 fun HomeScreenContent(
-    onManualReportClick: ()-> Unit,
-    onCameraReportClick: ()-> Unit,
-    onInfoClick: ()-> Unit,
-    onMapClick: ()-> Unit,
-    onAboutClick: ()-> Unit
-){
-    StartupDialog()
+   onManualReportClick: () -> Unit,
+   onCameraReportClick: () -> Unit,
+   onInfoClick: () -> Unit,
+   onMapClick: () -> Unit,
+   onAboutClick: () -> Unit
+) {
+   StartupDialog()
 
-    Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = {
-            Box(modifier = Modifier.statusBarsPadding()) {
-                HomeMenu(
-                    onInfoClick = onInfoClick,
-                    onAboutClick = onAboutClick,
-                    onMapClick = onMapClick
-                )
-            }
+   Scaffold(
+      modifier = Modifier.fillMaxSize(),
+      topBar = {
+         Box(modifier = Modifier.statusBarsPadding()) {
+            HomeMenu(
+               onInfoClick = onInfoClick,
+               onAboutClick = onAboutClick,
+               onMapClick = onMapClick
+            )
+         }
 
-        }) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+      }) { innerPadding ->
+      Column(
+         modifier = Modifier
+             .fillMaxSize()
+             .padding(innerPadding),
+         verticalArrangement = Arrangement.Center,
+         horizontalAlignment = Alignment.CenterHorizontally
+      ) {
 
-            Text("HogWatch")
+         Text("HogWatch")
 
-            Spacer(modifier = Modifier.height(200.dp))
+         Spacer(modifier = Modifier.height(200.dp))
 
-            CameraButton(onCameraReportClick = onCameraReportClick)
-            Spacer(modifier = Modifier.height((24.dp)))
-            ManualButton ( onManualReportClick = onManualReportClick )
-        }
-    }
+         CameraButton(onCameraReportClick = onCameraReportClick)
+         Spacer(modifier = Modifier.height((24.dp)))
+         ManualButton(onManualReportClick = onManualReportClick)
+      }
+   }
 
 }
 
 @Composable
 fun CameraButton(
-    onCameraReportClick: () -> Unit
+   onCameraReportClick: () -> Unit
 ) {
-    IconButton(
-        onClick = onCameraReportClick,
-        modifier = Modifier.size(150.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.camera),
-            contentDescription = "Camera"
-        )
-    }
+   IconButton(
+      onClick = onCameraReportClick,
+      modifier = Modifier.size(150.dp)
+   ) {
+      Image(
+         painter = painterResource(id = R.drawable.camera),
+         contentDescription = "Camera"
+      )
+   }
 }
 
 
 @Composable
 fun ManualButton(
-    onManualReportClick: () -> Unit
+   onManualReportClick: () -> Unit
 ) {
-    IconButton(
-        onClick = onManualReportClick,
-        modifier = Modifier.size(150.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.plus),
-            contentDescription = "Manual Submission"
-        )
-    }
+   IconButton(
+      onClick = onManualReportClick,
+      modifier = Modifier.size(150.dp)
+   ) {
+      Image(
+         painter = painterResource(id = R.drawable.plus),
+         contentDescription = "Manual Submission"
+      )
+   }
 }
+
 @Composable
 fun StartupDialog() {
-    // Starts as 'true' every time the app is launched
-    var showStartupDialog by rememberSaveable { mutableStateOf(true) }
+   // Starts as 'true' every time the app is launched
+   var showStartupDialog by rememberSaveable { mutableStateOf(true) }
 
-    if (showStartupDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showStartupDialog = false
-            },
-            title = { Text("Welcome to HogWatch!") },
-            text = {
-                Column {
-                    // Image banner
-                    Image(
-                        painter = painterResource(id = R.drawable.sleephog), // Replace with your image name
-                        contentDescription = "Hedgehog Pic",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(140.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop
-                    )
+   if (showStartupDialog) {
+      AlertDialog(
+         onDismissRequest = {
+            showStartupDialog = false
+         },
+         title = { Text("Welcome to HogWatch!") },
+         text = {
+            Column {
+               // Image banner
+               Image(
+                  painter = painterResource(id = R.drawable.sleephog), // Replace with your image name
+                  contentDescription = "Hedgehog Pic",
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(140.dp)
+                      .clip(RoundedCornerShape(8.dp)),
+                  contentScale = ContentScale.Crop
+               )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+               Spacer(modifier = Modifier.height(12.dp))
 
-                    Text("Please be respectful of the hedgehogs and do under no circumstances disturb them in order to get a good photo!")
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showStartupDialog = false
-                    }
-                ) {
-                    Text("I Understand")
-                }
+               Text("Please be respectful of the hedgehogs and do under no circumstances disturb them in order to get a good photo!")
             }
-        )
-    }
+         },
+         confirmButton = {
+            TextButton(
+               onClick = {
+                  showStartupDialog = false
+               }
+            ) {
+               Text("I Understand")
+            }
+         }
+      )
+   }
 }

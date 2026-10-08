@@ -23,53 +23,54 @@ import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : ComponentActivity() {
-    //private val locationRepository = LocationRepository(application.applicationContext) //Get current location
+   //private val locationRepository = LocationRepository(application.applicationContext) //Get current location
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        UserManager.getInstance(applicationContext)
-        //SightingRepository.init(applicationContext)
-        enableEdgeToEdge()
-        setContent {
-            SrcTheme {
-                val navController = rememberNavController()
+   override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+      UserManager.getInstance(applicationContext)
+      //SightingRepository.init(applicationContext)
+      enableEdgeToEdge()
+      setContent {
+         SrcTheme {
+            val navController = rememberNavController()
 
-                // Tab Switching
-                NavHost(
-                    navController = navController,
-                    startDestination = "home"
-                ) {
-                    composable("home") {
-                        HomeScreen(onNavigateToManualReport = {navController.navigate("ManualScreen")},
-                            onNavigateToCameraReport = {navController.navigate("CameraScreen")},
-                            onNavigateToMap = {navController.navigate("MapScreen")},
-                            onNavigateToInfo = {navController.navigate("InfoScreen")},
-                            onNavigateToAbout = {  }) //TODO: add navigation
-                    }
-                    composable("CameraScreen") {
-                        CameraScreen()
-                    }
-                    composable("ManualScreen") {
-                        ManualSubmitScreen(onNavigateBack = {navController.popBackStack()})
-                    }
-                    composable("MapScreen") {
-                        MapScreen()
-                    }
-                    composable("InfoScreen") {
-                        InfoScreen(onNavigateBack = { navController.popBackStack() })
-                    }
-                }
+            // Tab Switching
+            NavHost(
+               navController = navController,
+               startDestination = "home"
+            ) {
+               composable("home") {
+                  HomeScreen(
+                     onNavigateToManualReport = { navController.navigate("ManualScreen") },
+                     onNavigateToCameraReport = { navController.navigate("CameraScreen") },
+                     onNavigateToMap = { navController.navigate("MapScreen") },
+                     onNavigateToInfo = { navController.navigate("InfoScreen") },
+                     onNavigateToAbout = { }) //TODO: add navigation
+               }
+               composable("CameraScreen") {
+                  CameraScreen()
+               }
+               composable("ManualScreen") {
+                  ManualSubmitScreen(onNavigateBack = { navController.popBackStack() })
+               }
+               composable("MapScreen") {
+                  MapScreen()
+               }
+               composable("InfoScreen") {
+                  InfoScreen(onNavigateBack = { navController.popBackStack() })
+               }
             }
-        }
-        NetworkClient.initClient()
-    }
-    //onStart()
-    //onResume()
-    //onStop()
-    //onPause()
+         }
+      }
+      NetworkClient.initClient()
+   }
+   //onStart()
+   //onResume()
+   //onStop()
+   //onPause()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        NetworkClient.closeClient()
-    }
+   override fun onDestroy() {
+      super.onDestroy()
+      NetworkClient.closeClient()
+   }
 }

@@ -1,11 +1,11 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.serialization)
+   alias(libs.plugins.kotlin.jvm)
+   alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
-    jvmToolchain(libs.versions.java.get().toInt())
+   jvmToolchain(libs.versions.java.get().toInt())
 }
 dependencies {
-    implementation(ktorLibs.serialization.kotlinx.json)
+   implementation(ktorLibs.serialization.kotlinx.json)
 }
