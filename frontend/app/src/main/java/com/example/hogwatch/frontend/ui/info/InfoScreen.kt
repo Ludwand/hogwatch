@@ -58,7 +58,6 @@ fun InfoScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Display your image
             Image(
                 painter = painterResource(id = R.drawable.hedgehog_pic), // Replace with your image filename
                 contentDescription = "Picture of Hedgehog",
