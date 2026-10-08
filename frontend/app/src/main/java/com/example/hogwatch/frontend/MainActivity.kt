@@ -16,6 +16,7 @@ import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
 import com.example.hogwatch.frontend.data.repository.UserManager
 import com.example.hogwatch.frontend.ui.home.HomeScreen
+import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
 import com.google.android.gms.location.LocationServices
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(onNavigateToManualReport = {navController.navigate("ManualScreen")},
                             onNavigateToCameraReport = {navController.navigate("CameraScreen")},
                             onNavigateToMap = {navController.navigate("MapScreen")},
-                            onNavigateToInfo = {  },//TODO: add navigation
+                            onNavigateToInfo = {navController.navigate("InfoScreen")},
                             onNavigateToAbout = {  }) //TODO: add navigation
                     }
                     composable("CameraScreen") {
@@ -53,6 +54,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("MapScreen") {
                         MapScreen()
+                    }
+                    composable("InfoScreen") {
+                        InfoScreen(onNavigateBack = { navController.popBackStack() })
                     }
                 }
             }

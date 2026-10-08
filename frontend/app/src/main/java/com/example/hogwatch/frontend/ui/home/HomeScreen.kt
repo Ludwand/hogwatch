@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.example.hogwatch.frontend.R
-import com.example.hogwatch.frontend.ui.navigation.MenuPlaceHolder
+import com.example.hogwatch.frontend.ui.navigation.HomeMenu
 
 //https://www.imageonlinetools.com/frutiger-aero-icon-generator
 @Composable
@@ -51,7 +51,7 @@ fun HomeScreenContent(
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             Box(modifier = Modifier.statusBarsPadding()) {
-                MenuPlaceHolder(
+                HomeMenu(
                     onInfoClick = onInfoClick,
                     onAboutClick = onAboutClick,
                     onMapClick = onMapClick

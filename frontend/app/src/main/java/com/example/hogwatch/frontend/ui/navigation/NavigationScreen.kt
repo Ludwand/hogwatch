@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -20,8 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 /*This menu is AI-generated for a fast placeholder menu and will be replaced*/
+
+
 @Composable
-fun MenuPlaceHolder(
+fun HomeMenu(
     onInfoClick: () -> Unit,
     onAboutClick: () -> Unit,
     onMapClick: () -> Unit
@@ -39,8 +41,8 @@ fun MenuPlaceHolder(
 
             IconButton(onClick = { isExpanded = true }) {
                 Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Meny"
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu"
                 )
             }
 
