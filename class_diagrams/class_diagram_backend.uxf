@@ -1,0 +1,44 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>80</x><y>10</y><w>200</w><h>130</h></coordinates><panel_attributes>Main
+--
+- port: Int
+- host: String
+--
++ main(args: Array&lt;String&gt;): void
+--
+Responsibilities
+-- Start Netty server
+-- Specifies rootModule properties
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>340</y><w>400</w><h>150</h></coordinates><panel_attributes>Routing
+--
++ configureRouting(): void
+- postManualSubmission(submission: ManSub): HttpStatusCode
+--
+Responsibilities
+-- Receives a post for manual submission
+-- Deserializes  JSON to ManSub
+-- Prints the time fo the incomming sighting to the server terminal
+-- Send data to the database Database.insertSighting()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>340</y><w>210</w><h>190</h></coordinates><panel_attributes>Database
+--
+-conn: Connection
+--
++ insertSighting(userid: Int, lat: Float, long: Float, time: Int): Int
++ getSightings(): Iterable&lt;Sighting&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>10</x><y>600</y><w>400</w><h>190</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
+ManSub
+--
++ id: String
++ lat: String
++ lon: String
++ timeStamp: Long
+--
+Responsibilities
+-- Data class that represent the data from a sighting that is going
+to be sent over the network.
+-- Serializes and deserializes with JSON</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>380</y><w>210</w><h>130</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
+Sighting
+--
++ id: Int
++ userid: Int
++ lat: Float
++ lon: Float
++ timeStamp: Int
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>470</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>190</x><y>130</y><w>30</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;210;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>430</y><w>160</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>140;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>730</x><y>440</y><w>130</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element></diagram>
