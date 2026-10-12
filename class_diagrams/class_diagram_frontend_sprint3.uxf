@@ -1,0 +1,230 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>280</x><y>600</y><w>290</w><h>300</h></coordinates><panel_attributes>CameraScreenKt
+--
+- uiState: CameraUiState
+- context: Context
+- imageCapture: ImageCapture 
+- permissionLauncher: ManagedActivityResultLauncher&lt;String, Boolean&gt;
+---
++ CameraScreen(
+   viewModel: CameraViewModel = viewModel())
++ fun CameraContent(
+   hasCameraPermission: Boolean,uiState: CameraUiState,
+   imageCapture: ImageCapture,onCaptureClick: () -&gt; Unit,
+   onRetakeClick: () -&gt; Unit,onSubmitClick: () -&gt; Unit)
++ takePhoto(context: Context,
+    imageCapture: ImageCapture,
+    onPhotoCaptured: (ByteArray) -&gt; Unit)
+--
+Responsibilities
+-- Show a camerscreen and enables the user to 
+in the future sen ad foto to the server.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>390</y><w>300</w><h>140</h></coordinates><panel_attributes>MainActivityKt
+--
++ onCreate(savedInstanceState: Bundle?)
++ onDestroy()
+--
+Responsibilities
+-- Handles the android lifecycle events
+-- Directs to the different pages linked from the 
+	homepage</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>690</x><y>720</y><w>270</w><h>140</h></coordinates><panel_attributes>ManualScreenKt
+--
+- statusText: String
+-  showDatePicker: Boolean
+- datePickerState: DatePickerState
+--
++ ManualScreen(navController: NavController) 
+--
+Responsibilities
+-- Renders the manual sbmit screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1140</x><y>520</y><w>240</w><h>130</h></coordinates><panel_attributes>MapScreenKt
+--
+- coroutineScope: CoroutineScope
+- data: List&lt;MapInfo&gt;
+--
++ MapScreen()
+--
+Responsibilities
+-- Shows the sightings on a map</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>350</y><w>260</w><h>190</h></coordinates><panel_attributes>UserManager
+--
+-dataStore: Context
+- USER_ID_KEY:  Preferences.Key&lt;String&gt;
+- userIdFlow: Flow&lt;String?&gt;
+- INSTANCE: UserManager
+--
++ getUserId(): String
++ getInstance(context: Context)
+--
+Responsibilities
+-- Retrieves a unique user Id for each client
+-- Managing one instance if UserManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>1140</y><w>270</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Object&gt;&gt;
+NetworkClient
+--
+-client: HttpClient
+- manualSubmissionSend: Submission
+--
++ sendSightingToServer(submission: 
+	CreateSightingRequest): Boolean 
++ getMapInfo(): List&lt;MapInfo&gt;
+--
+Responsibilities
+-- Send HTTP post and get to the http-server</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>890</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+CreateSightingRequest
+--
+-id: String
+- lat, Double
+- lon: Double
+- timeStamp: Long
+- image: String?
+--
+Responsibilities
+-- Used to store variables 
+	associated to a submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>770</y><w>240</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Data class&gt;&gt;
+Sightings
+--
+- submissions: ArrayList&lt;Submission&gt;
+--
+Responsibilities
+-- Send multiple submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>640</y><w>160</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;140;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1210</x><y>640</y><w>240</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;220;280</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>170</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+LocationRepository
+--
+-fusedLocationClient: FusedLocationProviderClient
+--
++ getUserLocation()
+--
+Responsibilities
+-- The Class should retrieve the user 
+	location but it isn't implemented yet</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>1300</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Object&gt;&gt;
+SightingRepository
+--
+- sightings: Sightings.Companion
+--
++ submit(userId: String, lat: Double,
+      lon: Double, timeStamp: Long,
+      image: String?): Boolean
+--
+Responsibilities
+-- Forwards the submit request to 
+	the NetworkClient Object</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>1070</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1650</x><y>860</y><w>40</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;280;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>590</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+SightingSummary
+--
+- id: Int
+- lat: Double
+- lon: Double
+- hasImage: Boolean
+--
+Responsibilities
+-- Sending data to the map view</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>410</y><w>220</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+SightingExtraData
+--
+- id: Int
+- image: String
+--
+Responsibilities
+-- Packet image data when the client 
+	want to retreive an image.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1160</x><y>1320</y><w>210</w><h>140</h></coordinates><panel_attributes>LocalConfigKt
+--
++ BACKEND_URL: String
++ FRONTEND_URL: String
++ PORT: Int
+--
+Responsibilities
+-- Enables the developer to specify 
+	their own url properties</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>450</y><w>210</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>190;10;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>290</x><y>950</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+CameraViewModel
+--
+- userManager: UserManager
+- _uiState: MutableStateFlow&lt;CameraUiState&gt; 
++ iState: StateFlow&lt;CameraUiState&gt;
+--
++ onSubmit()
++ fun onPhotoCaptured(base64Image: String)
++ fun onRetakePhoto()
+--
+Responsibilities
+-- Manages the states related to the camera screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>770</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+CameraUiState
+--
++ date: Strin
++ time: String
++ userId: String
++ capturedImageBase64: String
++ isSubmitting: Boolean
+--
+Responsibilities
+-- Holds the states related to the
+ camera screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>930</y><w>110</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>90;30;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>750</y><w>100</w><h>70</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;50;80;10</additional_attributes></element><element><id>Relation</id><coordinates><x>470</x><y>520</y><w>340</w><h>100</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;80;320;10</additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>520</y><w>50</w><h>220</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;200;30;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1040</x><y>460</y><w>120</w><h>80</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1040</x><y>510</y><w>410</w><h>660</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>390;640;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1360</x><y>1310</y><w>90</w><h>40</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;20;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>900</x><y>1230</y><w>550</w><h>100</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>530;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>890</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>500</x><y>0</y><w>300</w><h>310</h></coordinates><panel_attributes>HomeScreen
+--
++ HomeScreen(
+   onNavigateToManualReport: () -&gt; Unit,
+   onNavigateToCameraReport: () -&gt; Unit,
+   onNavigateToMap: () -&gt; Unit,
+   onNavigateToInfo: () -&gt; Unit,
+   onNavigateToAbout: () -&gt; Unit)
++ fun HomeScreenContent(
+   onManualReportClick: () -&gt; Unit,
+   onCameraReportClick: () -&gt; Unit,
+   onInfoClick: () -&gt; Unit,
+   onMapClick: () -&gt; Unit,
+   onAboutClick: () -&gt; Unit)
++ CameraButton(onCameraReportClick: () -&gt; Unit)
++ ManualButton(onManualReportClick: () -&gt; Unit)
++ StartupDialog()
+--
+Responsibilities
+-- Renders the homeScreen
+-- Redriects to the other pages</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>300</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>850</x><y>130</y><w>260</w><h>90</h></coordinates><panel_attributes>InfoScreenKt
+--
++ fun InfoScreen(onNavigateBack: () -&gt; Unit)
+--
+Responsibilities
+-- Shows information about the hedgehog</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>210</y><w>120</w><h>200</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;10;10;180</additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>80</y><w>210</w><h>190</h></coordinates><panel_attributes>NavigationScreenKt
+--
++ isExpanded: Boolean
+--
++ HomeMenu(onInfoClick: () -&gt; Unit,
+   onAboutClick: () -&gt; Unit, onMapClick: () -&gt; Unit)
+--
+Responsibilities
+-- Shows a drop down menu on the home screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>180</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>1130</y><w>200</w><h>190</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>180;170;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>930</x><y>970</y><w>400</w><h>270</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+ManualViewModel
+--
+- userManager: UserManager
+- initialDate: String
+- initialTime: String
+- _uiState: MutableStateFlow&lt;CameraUiState&gt; 
++ iState: StateFlow&lt;CameraUiState&gt;
+--
++ onSubmit()
++ fetchUserLocation()
++ onDateChange(newDate: String)
++ onTimeChange(newTime: String)
++ onLongitudeChange(lon: String)
++ onLatitudeChange(lat: String)
++ convertToEpochSeconds(dateStr: String, timeStr: String): Long?
+--
+Responsibilities
+-- Manages the states related to the manual submit screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>920</y><w>210</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+ManualReportUiState
+--
+- latitudeString: String
+- longitudeString: String
+- date: String
+- time: String
+- isSubmitting: Boolean
+- isSubmittedSuccess: Boolean
+- errorMessage: String
+- showDatePicker: Boolean
+- showTimePicker: Boolean 
+--
+Responsibilities
+-- Holds the states related to the 
+	manual submission screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>850</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>1060</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;20</additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>850</y><w>70</w><h>140</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>50;120;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>760</x><y>1190</y><w>190</w><h>130</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;110;170;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1140</x><y>180</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+MapViewModel
+--
++  pins: MutableState&lt;Sightings&gt;
++ selectedPinId: Int
+--
++ selectPin(id: Int)
++ closePopup()
+--
+Responsibilities
+-- Manages the states related 
+	to the MapScreen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>360</y><w>30</w><h>180</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element></diagram>

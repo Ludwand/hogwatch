@@ -1,0 +1,43 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>510</x><y>190</y><w>240</w><h>110</h></coordinates><panel_attributes>CameraScreenKt
+--
++ fun CameraScreen()
+--
+Responsibilities
+-- Right now only shows a blank page</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>260</y><w>300</w><h>240</h></coordinates><panel_attributes>MainActivityKt
+--
++ onCreate(savedInstanceState: Bundle?)
++ HomeScreen(navController: NavController)
++ CameraButton( navController: NavController,
+    modifier: Modifier = Modifier)
++ fun ManualButton(navController: NavController,
+    modifier: Modifier = Modifier)
++  fun MapButton(navController: NavController,
+    modifier: Modifier = Modifier)
+--
+Responsibilities
+-- Handles the android lifecycle events
+-- Directs to the different pages linked from the 
+	homepage</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>30</y><w>270</w><h>100</h></coordinates><panel_attributes>ManualScreenKt
+--
++ ManualScreen(navController: NavController) 
+--
+Responsibilities
+-- Renders the manual sbmit screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>500</x><y>350</y><w>240</w><h>90</h></coordinates><panel_attributes>MapScreenKt
+--
++ MapScreen()
+--
+Responsibilities
+-- Right now only shows a blank page</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>430</x><y>520</y><w>260</w><h>190</h></coordinates><panel_attributes>UserManager
+--
+- dataStore: DataStore&lt;Preferences&gt;
+- USER_ID_KEY:  Preferences.Key&lt;String&gt;
+- _userId:  MutableStateFlow&lt;T&gt;
+- userId:  StateFlow&lt;T&gt;
+- INSTANCE: UserManager
+--
+- getOrCreateUserId()
++ getInstance(context: Context)
+--
+Responsibilities
+-- Retrieves a unique user Id for each client
+-- Managing one instance if UserManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>410</y><w>160</w><h>220</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;140;200</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>100</y><w>260</w><h>230</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>240;10;10;210</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>250</y><w>240</w><h>110</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>220;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>360</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>210;10;10;20</additional_attributes></element></diagram>

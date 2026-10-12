@@ -25,7 +25,7 @@ Responsibilities
 --
 + insertSighting(userid: Int, lat: Float, 
 	long: Float, time: Int): Int
-+ getSightings(): Iterable&lt;Sighting&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>10</x><y>600</y><w>400</w><h>190</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
++ getSightings(): Iterable&lt;Sighting&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>600</y><w>400</w><h>190</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
 ManSub
 --
 + id: String
@@ -36,7 +36,7 @@ ManSub
 Responsibilities
 -- Data class that represent the data from a sighting that is going
 to be sent over the network.
--- Serializes and deserializes with JSON</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>500</y><w>30</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>190</x><y>150</y><w>30</w><h>210</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;190;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>430</y><w>160</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>140;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>800</x><y>440</y><w>100</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>80;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>0</y><w>210</w><h>190</h></coordinates><panel_attributes>LocalConfigKt
+-- Serializes and deserializes with JSON</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>400</x><y>0</y><w>210</w><h>190</h></coordinates><panel_attributes>LocalConfigKt
 --
 + BACKEND_URL: String
 + FRONTEND_URL: String
@@ -44,7 +44,7 @@ to be sent over the network.
 --
 Responsibilities
 -- Enables the developer to specify 
-	their own url properties</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>70</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>890</x><y>390</y><w>210</w><h>140</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
+	their own url properties</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>890</x><y>390</y><w>210</w><h>140</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
 Sighting
 --
 + id: Int
@@ -53,4 +53,4 @@ Sighting
 + lon: Float
 + timeStamp: Int
 + image: String
-</panel_attributes><additional_attributes></additional_attributes></element></diagram>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>160</x><y>150</y><w>30</w><h>210</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;190;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>70</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>440</y><w>160</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>140;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>180</x><y>500</y><w>30</w><h>120</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>800</x><y>450</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element></diagram>
