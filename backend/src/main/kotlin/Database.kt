@@ -1,5 +1,6 @@
 package com.example.hogwatch.backend
 
+import com.example.hogwatch.shared.SightingSummary
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
@@ -25,7 +26,7 @@ object Database {
       }
    }
 
-   public data class Sighting(
+   data class Sighting(
       val id: Int,
       val userid: String,
       val lat: Double,
@@ -62,21 +63,98 @@ object Database {
       return null
    }
 
-   // In the future this should be replaced by a method that filters to an area and groups nearby sightings
-   fun getSightings(): Iterable<Sighting> {
-      val ret = ArrayList<Sighting>()
+   fun getSighting(id: Int): Sighting? {
       try {
-         conn.prepareStatement("SELECT id, userid, lat, long, time, image FROM Sightings ORDER BY id")
+         conn.prepareStatement("SELECT userid, lat, long, time, image FROM Sightings WHERE id = ?")
             .use<PreparedStatement, Unit> { st ->
+               st.setInt(1, id)
+               val rs: ResultSet = st.executeQuery()
+               if (rs.next()) return Sighting(
+                  id,
+                  rs.getString(1),
+                  rs.getDouble(2),
+                  rs.getDouble(3),
+                  rs.getLong(4),
+                  rs.getString(5)
+               )
+            }
+      } catch (e: SQLException) {
+         println(e)
+      }
+      return null
+   }
+
+   fun getSightingSummary(id: Int): SightingSummary? {
+      try {
+         conn.prepareStatement("SELECT lat, long, image IS NOT NULL FROM Sightings WHERE id = ?")
+            .use<PreparedStatement, Unit> { st ->
+               st.setInt(1, id)
+               val rs: ResultSet = st.executeQuery()
+               if (rs.next()) return SightingSummary(
+                  id,
+                  rs.getDouble(1),
+                  rs.getDouble(2),
+                  rs.getBoolean(3)
+               )
+            }
+      } catch (e: SQLException) {
+         println(e)
+      }
+      return null
+   }
+
+   fun getSightingImage(id: Int): String? {
+      try {
+         conn.prepareStatement("SELECT image FROM Sightings WHERE id = ?")
+            .use<PreparedStatement, Unit> { st ->
+               st.setInt(1, id)
+               val rs: ResultSet = st.executeQuery()
+               if (rs.next()) return rs.getString(1)
+            }
+      } catch (e: SQLException) {
+         println(e)
+      }
+      return null
+   }
+
+   fun getSightingSummaries(userid: String): ArrayList<SightingSummary> {
+      val ret = ArrayList<SightingSummary>()
+      try {
+         conn.prepareStatement("SELECT id, lat, long, image IS NOT NULL FROM Sightings WHERE userid = ? ORDER BY id")
+            .use<PreparedStatement, Unit> { st ->
+               st.setString(1, userid)
                val rs: ResultSet = st.executeQuery()
                while (rs.next()) ret.add(
-                  Sighting(
+                  SightingSummary(
                      rs.getInt(1),
-                     rs.getString(2),
+                     rs.getDouble(2),
                      rs.getDouble(3),
-                     rs.getDouble(4),
-                     rs.getLong(5),
-                     rs.getString(6)
+                     rs.getBoolean(4)
+                  )
+               )
+            }
+      } catch (e: SQLException) {
+         println(e)
+      }
+      return ret
+   }
+
+   fun getSightingSummaries(minLat: Double, maxLat: Double, minLong: Double, maxLong: Double): ArrayList<SightingSummary> {
+      val ret = ArrayList<SightingSummary>()
+      try {
+         conn.prepareStatement("SELECT id, lat, long, image IS NOT NULL FROM Sightings WHERE lat >= ? AND lat <= ? AND long >= ? AND long <= ? ORDER BY id")
+            .use<PreparedStatement, Unit> { st ->
+               st.setDouble(1, minLat)
+               st.setDouble(2, maxLat)
+               st.setDouble(3, minLong)
+               st.setDouble(4, maxLong)
+               val rs: ResultSet = st.executeQuery()
+               while (rs.next()) ret.add(
+                  SightingSummary(
+                     rs.getInt(1),
+                     rs.getDouble(2),
+                     rs.getDouble(3),
+                     rs.getBoolean(4)
                   )
                )
             }

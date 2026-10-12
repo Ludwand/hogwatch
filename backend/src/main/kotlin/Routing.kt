@@ -59,6 +59,53 @@ fun Application.configureRouting() {
          }
       }
 
+      get("/pins/{minLat}/{maxLat}/{minLong}/{maxLong}") {
+         try {
+            val minLat = call.parameters["minLat"]?.toDouble() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val maxLat = call.parameters["maxLat"]?.toDouble() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val minLong = call.parameters["minLong"]?.toDouble() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val maxLong = call.parameters["maxLong"]?.toDouble() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val sightings = Database.getSightingSummaries(minLat, maxLat, minLong, maxLong)
+            call.respond(HttpStatusCode.OK, Sightings(sightings))
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
+
+      get("/sightings/{userid}") {
+         try {
+            val userid = call.parameters["userid"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val sightings = Database.getSightingSummaries(userid)
+            call.respond(HttpStatusCode.OK, Sightings(sightings))
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
+
+      get("/sighting/{id}") {
+         try {
+            val id = call.parameters["id"]?.toInt() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val sighting = Database.getSightingSummary(id) ?: return@get call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.OK, sighting)
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
+
+      get("/sighting/{id}/image") {
+         try {
+            val id = call.parameters["id"]?.toInt() ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val image = Database.getSightingImage(id) ?: return@get call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.OK, image)
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
+
       post("/submission") {
          try {
             if (!LatestSubmission.canSubmit(call.request.origin.remoteAddress)) {
