@@ -52,7 +52,10 @@ data class ManualReportUiState(
    val isSubmittedSuccess: Boolean = false,
    val errorMessage: String? = null,
    var showDatePicker: Boolean = false,
-   var showTimePicker: Boolean = false
+   var showTimePicker: Boolean = false,
+   var isAlive: String = "Alive",
+   val radioOptions: List<String> = listOf("Alive", "Injured", "Deceased"),
+   var photo: String? = null
 )
 
 class ManualViewModel(application: Application) : AndroidViewModel(application) {
@@ -68,6 +71,7 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
    private val _uiState =
       MutableStateFlow(ManualReportUiState(date = initialDate, time = initialTime))
    val uiState: StateFlow<ManualReportUiState> = _uiState.asStateFlow()
+
 
    fun onSubmit() {
       val state = _uiState.value
@@ -94,7 +98,7 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
          try {
             val userId = userManager.getUserId()
 
-            if (SightingRepository.submit(userId, lat, lon, epochSeconds, null)){
+            if (SightingRepository.submit(userId, lat, lon, epochSeconds, state.photo, state.isAlive)){
                _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = true) }
             } else {
                _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = false, errorMessage = "Submission failed due to a network error.") }
@@ -149,6 +153,14 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       _uiState.update { it.copy(latitudeString = lat) }
    }
 
+   fun onRadioButton(option: String){
+      _uiState.update { it.copy(isAlive = option) }
+   }
+
+   fun onAddPhoto(photo: String){
+
+   }
+
    //https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html#atTime-int-int-
    fun convertToEpochSeconds(dateStr: String, timeStr: String): Long? {
       return try {
@@ -167,7 +179,15 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       val minLon = 10.5727
 
       return lat in minLat..maxLat && lon in minLon..maxLon
+   }
 
+   fun getIsAliveInt(): Int {
+      return when (uiState.value.isAlive) {
+         "Alive" -> 0
+         "Injured" -> 1
+         "Deceased" -> 2
+         else -> -1
+      }
    }
 }
 

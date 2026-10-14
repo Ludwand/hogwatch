@@ -12,7 +12,8 @@ CREATE TABLE Sightings (
     lat DOUBLE PRECISION NOT NULL,
     long DOUBLE PRECISION NOT NULL,
     time BIGINT NOT NULL DEFAULT (extract(epoch from now())),
-    image TEXT
+    image TEXT,
+    isAlive TEXT NOT NULL
 );
 ALTER TABLE Sightings OWNER TO dat257;
 

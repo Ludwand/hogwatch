@@ -29,11 +29,6 @@ object LatestSubmission {
 
 fun Application.configureRouting() {
    routing {
-      // Invoking staticResources() enables your application to provide standard website content,
-      // such as HTML and JavaScript files. Although this content can be executed within the browser,
-      // it is considered static from the server's point of view.
-      staticResources("/content", "mycontent")
-
       get("/get_map_info") {
          try {
             //TODO: retrieve data from the database
@@ -127,7 +122,7 @@ fun Application.configureRouting() {
                "Servern tog emot en observation från: " +
                        "${newSubmission.userId} på platsen lat: " +
                        "${newSubmission.lat} lon: " +
-                       "${newSubmission.lon} at $readableTime"
+                       "${newSubmission.lon} at $readableTime. The hedgehos was ${newSubmission.isAlive}"
             ) //TODO: remove after testing is done
 
             val res = Database.insertSighting(
@@ -135,9 +130,10 @@ fun Application.configureRouting() {
                newSubmission.lat,
                newSubmission.lon,
                newSubmission.timeStamp,
-               newSubmission.image
+               newSubmission.image,
+               newSubmission.isAlive
             )
-            if (res != null) { //TODO: dubble check if the error handling is correct
+            if (res != null) {
                call.respond(HttpStatusCode.Created, "Submission successfully received!")
             } else {
                call.respond(

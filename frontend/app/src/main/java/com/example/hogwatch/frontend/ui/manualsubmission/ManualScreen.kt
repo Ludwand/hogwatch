@@ -1,12 +1,16 @@
 package com.example.hogwatch.frontend.ui.manualsubmission
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,7 +41,9 @@ fun ManualSubmitScreen(
       onDateChange = viewModel::onDateChange,
       onTimeChange = viewModel::onTimeChange,
       onFetchLocation = viewModel::fetchUserLocation,
-      onSubmit = viewModel::onSubmit
+      onSubmit = viewModel::onSubmit,
+      onRadioButton = viewModel::onRadioButton,
+      onAddPhoto = viewModel::onAddPhoto
    )
 }
 
@@ -51,7 +57,9 @@ fun ManualSubmitContent(
    onTimeChange: (String) -> Unit,
    onFetchLocation: () -> Unit,
    onSubmit: () -> Unit,
-   modifier: Modifier = Modifier
+   modifier: Modifier = Modifier,
+   onRadioButton: (String) -> Unit,
+   onAddPhoto: (String) -> Unit
 ) {
    var showDatePicker by remember { mutableStateOf(false) }
    val datePickerState = rememberDatePickerState(
@@ -149,6 +157,14 @@ fun ManualSubmitContent(
             Text("Use my location")
          }
 
+         Button(
+            onClick = {  }
+         ) {
+            Text("Add photo")
+         }
+
+
+
          if (uiState.errorMessage != null) {
             Text(
                text = uiState.errorMessage,
@@ -156,6 +172,33 @@ fun ManualSubmitContent(
             )
          }
 
+         //https://developer.android.com/develop/ui/compose/components/radio-button
+         Column(modifier.selectableGroup()) {
+            uiState.radioOptions.forEach { text ->
+               Row(
+                  Modifier
+                     .fillMaxWidth()
+                     .height(56.dp)
+                     .selectable(
+                        selected = (text == uiState.isAlive),
+                        onClick = { onRadioButton(text)},
+                        role = Role.RadioButton
+                     )
+                     .padding(horizontal = 16.dp),
+                  verticalAlignment = Alignment.CenterVertically
+               ) {
+                  RadioButton(
+                     selected = (text == uiState.isAlive),
+                     onClick = null // null recommended for accessibility with screen readers
+                  )
+                  Text(
+                     text = text,
+                     style = MaterialTheme.typography.bodyLarge,
+                     modifier = Modifier.padding(start = 16.dp)
+                  )
+               }
+            }
+         }
          Spacer(modifier = Modifier.weight(1f))
 
          // Submit
@@ -171,13 +214,11 @@ fun ManualSubmitContent(
             } else {
                Text("Submit Sighting")
             }
-            //TODO: When connection is refused isSubmittedSuccess seems to become true
          }
       }
    }
 
    //https://stackoverflow.com/questions/77676317/how-to-disable-future-dates-in-android-compose-material3-datepicker
-   //TODO: Disable future dates
    if (showDatePicker) {
       DatePickerDialog(
          onDismissRequest = { showDatePicker = false },

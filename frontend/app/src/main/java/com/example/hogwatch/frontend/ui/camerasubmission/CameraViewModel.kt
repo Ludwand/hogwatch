@@ -50,7 +50,8 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                lat = 57.6282764,
                lon = 11.9030166,
                timeStamp = System.currentTimeMillis() / 1000L,
-               image = image
+               image = image,
+               isAlive = "Alive"
             )
 
             if (success) {

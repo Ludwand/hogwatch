@@ -32,7 +32,8 @@ object Database {
       val lat: Double,
       val long: Double,
       val time: Long,
-      val image: String?
+      val image: String?,
+      val isAlive: String
    )
 
    fun insertSighting(
@@ -40,12 +41,13 @@ object Database {
       lat: Double,
       long: Double,
       time: Long,
-      image: String?
+      image: String?,
+      isAlive: String
    ): Int? {
       try {
          conn.prepareStatement(
-            "INSERT INTO Sightings (userid, lat, long, time, image) " +
-                    "VALUES (?, ?, ?, ?, ?) " +
+            "INSERT INTO Sightings (userid, lat, long, time, image, isAlive) " +
+                    "VALUES (?, ?, ?, ?, ?, ?) " +
                     "RETURNING id"
          ).use<PreparedStatement, Unit>
          { st ->
@@ -54,6 +56,7 @@ object Database {
             st.setDouble(3, long)
             st.setLong(4, time)
             st.setString(5, image)
+            st.setString(6, isAlive)
             val rs: ResultSet = st.executeQuery()
             if (rs.next()) return rs.getInt(1)
          }
@@ -65,7 +68,7 @@ object Database {
 
    fun getSighting(id: Int): Sighting? {
       try {
-         conn.prepareStatement("SELECT userid, lat, long, time, image FROM Sightings WHERE id = ?")
+         conn.prepareStatement("SELECT userid, lat, long, time, image, isAlive FROM Sightings WHERE id = ?")
             .use<PreparedStatement, Unit> { st ->
                st.setInt(1, id)
                val rs: ResultSet = st.executeQuery()
@@ -75,7 +78,8 @@ object Database {
                   rs.getDouble(2),
                   rs.getDouble(3),
                   rs.getLong(4),
-                  rs.getString(5)
+                  rs.getString(5),
+                  rs.getString(6)
                )
             }
       } catch (e: SQLException) {

@@ -12,18 +12,17 @@ object SightingRepository {
       lat: Double,
       lon: Double,
       timeStamp: Long,
-      image: String?
+      image: String?,
+      isAlive: String
    ): Boolean {
       val manualSubmissionSend = CreateSightingRequest(
          userId = userId,
          lat = lat,
          lon = lon,
          timeStamp = timeStamp,
-         image = image
+         image = image,
+         isAlive = isAlive
       )
-
-      //TODO:validate input
-
       return NetworkClient.sendSightingToServer(manualSubmissionSend)
    }
 

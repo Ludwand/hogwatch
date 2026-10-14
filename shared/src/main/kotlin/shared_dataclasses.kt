@@ -14,7 +14,8 @@ data class CreateSightingRequest(
    val lat: Double,
    val lon: Double,
    val timeStamp: Long,
-   val image: String?
+   val image: String?,
+   val isAlive: String
 )
 
 @Serializable
