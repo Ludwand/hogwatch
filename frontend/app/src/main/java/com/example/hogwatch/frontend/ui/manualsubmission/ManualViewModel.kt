@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -36,6 +37,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -75,7 +77,10 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       if (lat == null || lon == null) {
          _uiState.update { it.copy(errorMessage = "Latitude or longitude isn't correct formated") }
          return
-      }//TODO: check if the coordinate is in Sweden
+      } else if (!inSweden(lat, lon)){ // https://sv.wikipedia.org/wiki/Sveriges_ytterpunkter
+         _uiState.update { it.copy(errorMessage = "The sighting must be in Sweden") }
+         return
+      }
 
       val epochSeconds = convertToEpochSeconds(state.date, state.time)
 
@@ -89,15 +94,19 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
          try {
             val userId = userManager.getUserId()
 
-            SightingRepository.submit(userId, lat, lon, epochSeconds, null)
+            if (SightingRepository.submit(userId, lat, lon, epochSeconds, null)){
+               _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = true) }
+            } else {
+               _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = false, errorMessage = "Submission failed due to a network error.") }
+            }
 
-            _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = true) }
+
 
          } catch (e: Exception) {
             _uiState.update {
                it.copy(
                   isSubmitting = false,
-                  errorMessage = e.message ?: "Something went wrong with submitting"
+                  errorMessage = e.message ?: "Something went wrong when submitting"
                )
             }
          }
@@ -118,7 +127,17 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
    }
 
    fun onTimeChange(newTime: String) {
-      _uiState.update { it.copy(time = newTime) }
+      val formatter = DateTimeFormatter.ofPattern("HH:mm")
+      val parsedNewTime = LocalTime.parse(newTime, formatter)
+      val now = LocalTime.now()
+
+      if ((uiState.value.date.compareTo(initialDate) == 0) && (parsedNewTime.isAfter(now))){
+         _uiState.update { it.copy(errorMessage = "You can't report a hedgehog in the future.") }
+         _uiState.update { it.copy(time = now.format(DateTimeFormatter.ofPattern("HH:mm"))) }
+      } else{
+         _uiState.update { it.copy(time = newTime) }
+      }
+
    }
 
 
@@ -138,9 +157,18 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
          localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
       } catch (e: Exception) {
          null
-         //If the formating is wrong
       }
    }
 
+   fun inSweden(lat: Double, lon: Double): Boolean{
+      val maxLat = 69.0336
+      val minLat = 55.2013
+      val maxLon = 24.100
+      val minLon = 10.5727
 
+      return lat in minLat..maxLat && lon in minLon..maxLon
+
+   }
 }
+
+

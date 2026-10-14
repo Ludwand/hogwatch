@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
 
@@ -52,7 +54,10 @@ fun ManualSubmitContent(
    modifier: Modifier = Modifier
 ) {
    var showDatePicker by remember { mutableStateOf(false) }
-   val datePickerState = rememberDatePickerState()
+   val datePickerState = rememberDatePickerState(
+      yearRange = NoFutureDates.yearRange,
+      selectableDates = NoFutureDates
+   )
 
    var showTimePicker by remember { mutableStateOf(false) }
    val timePickerState = rememberTimePickerState(is24Hour = true)
@@ -247,4 +252,18 @@ fun TimePickerDialog(
       dismissButton = dismissButton,
       text = { content() }
    )
+}
+
+// Source - https://stackoverflow.com/a/79754991
+// Posted by BennyG
+// Retrieved 2026-10-14, License - CC BY-SA 4.0
+//Modified to fit our application
+@OptIn(ExperimentalMaterial3Api::class)
+object NoFutureDates : SelectableDates {
+   private val today = LocalDate.now()
+   private val todayMillis = today.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+   val yearRange = IntRange(1900, today.year)
+
+   override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis <= todayMillis
+   override fun isSelectableYear(year: Int) = year in yearRange
 }
