@@ -65,7 +65,7 @@ NetworkClient
 + getMapInfo(): List&lt;MapInfo&gt;
 --
 Responsibilities
--- Send HTTP post and get to the http-server</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>890</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+-- Send HTTP post and get to the http-server</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>920</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
 CreateSightingRequest
 --
 -id: String
@@ -82,7 +82,7 @@ Sightings
 - submissions: ArrayList&lt;Submission&gt;
 --
 Responsibilities
--- Send multiple submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>640</y><w>160</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;140;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1210</x><y>640</y><w>240</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;220;280</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>170</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+-- Send multiple submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>640</y><w>160</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;140;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1210</x><y>640</y><w>240</w><h>330</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;220;310</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>170</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
 LocationRepository
 --
 -fusedLocationClient: FusedLocationProviderClient
@@ -102,7 +102,7 @@ SightingRepository
 --
 Responsibilities
 -- Forwards the submit request to 
-	the NetworkClient Object</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>1070</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1650</x><y>860</y><w>40</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;280;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>590</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+	the NetworkClient Object</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>1100</y><w>30</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1650</x><y>860</y><w>40</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;280;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>590</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
 SightingSummary
 --
 - id: Int
@@ -227,4 +227,4 @@ MapViewModel
 --
 Responsibilities
 -- Manages the states related 
-	to the MapScreen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>360</y><w>30</w><h>180</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element></diagram>
+	to the MapScreen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>360</y><w>30</w><h>180</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>860</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element></diagram>
