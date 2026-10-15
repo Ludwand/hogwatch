@@ -15,29 +15,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MapViewModel : ViewModel() {
-    val pins = mutableStateOf(Sightings())
+data class MapState(
+   val pins: Sightings = Sightings(),
+   val selectedPinImage: ImageBitmap? = null,
+   val selectedPinId: Int? = null
+)
 
-   var selectedPinImage by mutableStateOf<ImageBitmap?>(null)
+class MapViewModel : ViewModel() {
+   var mapState by mutableStateOf(MapState())
       private set
 
-    var selectedPinId by mutableStateOf<Int?>(null)
-        private set
    suspend fun loadPins(
       minLat: Double,
       maxLat: Double,
       minLon: Double,
-      maxLon: Double)
-   {
-      pins.value =
-         NetworkClient.getMapPins(minLat, maxLat, minLon, maxLon)
+      maxLon: Double
+   ) {
+      val pins = NetworkClient.getMapPins(minLat, maxLat, minLon, maxLon)
 
-      println("Pins" + pins.value)
+      mapState = mapState.copy(pins = pins)
    }
 
    fun selectPin(id: Int) {
-      selectedPinId = id
-      selectedPinImage = null
+      mapState = mapState.copy(
+         selectedPinId = id,
+         selectedPinImage = null
+      )
 
       viewModelScope.launch {
          val pinInfo = NetworkClient.getMapPinInfo(id)
@@ -49,13 +52,16 @@ class MapViewModel : ViewModel() {
             }
          }
 
-         if (selectedPinId == id) {
-            selectedPinImage = bitmap
+         if (mapState.selectedPinId == id) {
+            mapState = mapState.copy(selectedPinImage = bitmap)
          }
       }
    }
 
-    fun closePopup() {
-        selectedPinId = null
-    }
+   fun closePopup() {
+      mapState = mapState.copy(
+         selectedPinId = null,
+         selectedPinImage = null
+      )
+   }
 }

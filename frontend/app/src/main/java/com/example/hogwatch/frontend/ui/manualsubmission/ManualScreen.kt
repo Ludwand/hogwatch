@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -34,13 +35,17 @@ fun ManualSubmitScreen(
       }
    }
 
+   val permission = rememberLocationPermission(
+      onPermissionGranted = viewModel::fetchUserLocation
+   )
+
    ManualSubmitContent(
       uiState = uiState,
       onLatitudeChange = viewModel::onLatitudeChange,
       onLongitudeChange = viewModel::onLongitudeChange,
       onDateChange = viewModel::onDateChange,
       onTimeChange = viewModel::onTimeChange,
-      onFetchLocation = viewModel::fetchUserLocation,
+      onFetchLocation = permission.requestPermission,
       onSubmit = viewModel::onSubmit,
       onRadioButton = viewModel::onRadioButton,
       onAddPhoto = viewModel::onAddPhoto

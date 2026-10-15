@@ -61,7 +61,7 @@ data class ManualReportUiState(
 class ManualViewModel(application: Application) : AndroidViewModel(application) {
    private val userManager = UserManager.getInstance(application)
 
-   //private val locationRepo = LocationRepository.getInstance(application) //For fetching location
+   private val locationRepo = LocationRepository(application)
 
    //https://www.baeldung.com/kotlin/current-date-time
    private val initialDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -120,10 +120,14 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
 
    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
    fun fetchUserLocation() {
-      _uiState.update { it.copy(longitudeString = "11.9748") }
-      _uiState.update { it.copy(latitudeString = "57.6892") }
-      println("Fetching user location - not implemented yet")
-      //TODO: fetch user location
+      locationRepo.getUserLocation { location ->
+         _uiState.update {
+            it.copy(
+               latitudeString = location.latitude.toString(),
+               longitudeString = location.longitude.toString()
+            )
+         }
+      }
    }
 
    fun onDateChange(newDate: String) {

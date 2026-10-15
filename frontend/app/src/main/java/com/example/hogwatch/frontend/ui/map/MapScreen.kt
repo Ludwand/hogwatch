@@ -1,21 +1,13 @@
 package com.example.hogwatch.frontend.ui.map
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.res.painterResource
-import com.example.hogwatch.frontend.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,17 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.clustering.Clustering
 import com.google.maps.android.clustering.ClusterItem
@@ -44,7 +31,8 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.collect
+import com.example.hogwatch.frontend.data.repository.LocationRepository
+import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
 
 // Wrapper used by Google's clustering system.
 data class MapPin(
@@ -55,71 +43,24 @@ data class MapPin(
    override val zIndex: Float? = null
 ) : ClusterItem
 
-@SuppressLint("MissingPermission")
 @Composable
 fun rememberLocationCameraState(): CameraPositionState {
    val context = LocalContext.current
    val cameraState = rememberCameraPositionState()
 
-   var hasPermission by remember {
-      mutableStateOf(
-         listOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-         ).any {
-            ContextCompat.checkSelfPermission(context, it) ==
-                    PackageManager.PERMISSION_GRANTED
-         }
-      )
+   val locationRepo = remember(context) {
+      LocationRepository(context)
    }
 
-   val launcher = rememberLauncherForActivityResult(
-      ActivityResultContracts.RequestMultiplePermissions()
-   ) { permissions ->
-      Log.d("GPS", "Permission result: $permissions")
-      hasPermission = permissions.values.any { it }
-   }
+   val permission = rememberLocationPermission(requestOnStart = true)
 
-   // Request permission when opening the screen.
-   LaunchedEffect(Unit) {
-      Log.d("GPS", "Initial permission: $hasPermission")
-
-      if (!hasPermission) {
-         Log.d("GPS", "Requesting permission")
-
-         launcher.launch(arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-         ))
-      }
-   }
-
-   // Fetch location once permission is granted.
-   LaunchedEffect(hasPermission) {
-      if (hasPermission) {
-         val locationClient = LocationServices.getFusedLocationProviderClient(context)
-
-         // First try cached location (fast).
-         locationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let {
-               cameraState.position = CameraPosition.fromLatLngZoom(
-                  LatLng(it.latitude, it.longitude),
-                  8f
-               )
-            }
-         }
-
-         // Then request current location (potentially slower).
-         locationClient.getCurrentLocation(
-            Priority.PRIORITY_HIGH_ACCURACY,
-            CancellationTokenSource().token
-         ).addOnSuccessListener { location ->
-            location?.let {
-               cameraState.position = CameraPosition.fromLatLngZoom(
-                  LatLng(it.latitude, it.longitude),
-                  8f
-               )
-            }
+   LaunchedEffect(permission.hasPermission) {
+      if (permission.hasPermission) {
+         locationRepo.getUserLocation { location ->
+            cameraState.position = CameraPosition.fromLatLngZoom(
+               LatLng(location.latitude, location.longitude),
+               8f
+            )
          }
       }
    }
@@ -133,7 +74,6 @@ fun rememberLocationCameraState(): CameraPositionState {
 fun MapScreen(viewModel: MapViewModel = viewModel())
 {
    val cameraState = rememberLocationCameraState()
-
    var mapLoaded by remember { mutableStateOf(false) }
 
    LaunchedEffect(mapLoaded) {
@@ -163,7 +103,7 @@ fun MapScreen(viewModel: MapViewModel = viewModel())
       onMapLoaded = { mapLoaded = true })
    {
       // Convert backend pin data to ClusterItems.
-      val mapPins = viewModel.pins.value.submissions.map { sub ->
+      val mapPins = viewModel.mapState.pins.submissions.map { sub ->
          MapPin(
             id = sub.id,
             position = LatLng(sub.lat, sub.lon)
@@ -181,7 +121,7 @@ fun MapScreen(viewModel: MapViewModel = viewModel())
    }
 
    // No selected pin -> no popup.
-   if (viewModel.selectedPinId == null)
+   if (viewModel.mapState.selectedPinId == null)
       return
 
    // Popup shown after clicking a pin.
@@ -191,13 +131,13 @@ fun MapScreen(viewModel: MapViewModel = viewModel())
       },
       confirmButton = {},
       title = {
-         Text("Sighting ${viewModel.selectedPinId}")
+         Text("Sighting ${viewModel.mapState.selectedPinId}")
       },
       text = {
          // Vertically arranged popup content with spacing.
          Column(verticalArrangement = Arrangement.spacedBy(12.dp))
          {
-            viewModel.selectedPinImage?.let { bitmap ->
+            viewModel.mapState.selectedPinImage?.let { bitmap ->
                Image(
                   bitmap = bitmap,
                   contentDescription = "Sighting image",
