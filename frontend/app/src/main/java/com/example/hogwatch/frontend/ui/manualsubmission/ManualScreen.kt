@@ -1,8 +1,10 @@
 package com.example.hogwatch.frontend.ui.manualsubmission
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.DateRange
@@ -82,11 +84,14 @@ fun ManualSubmitContent(
          )
       }
    ) { innerPadding ->
+      val scrollState = rememberScrollState()
       Column(
          modifier = modifier
             .fillMaxSize()
             .padding(innerPadding)
+            .verticalScroll(scrollState)
             .padding(16.dp),
+
          verticalArrangement = Arrangement.spacedBy(12.dp)
       ) {
 
