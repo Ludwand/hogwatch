@@ -2,6 +2,7 @@ package com.example.hogwatch.frontend.data.remote
 
 import com.example.hogwatch.shared.CreateSightingRequest
 import com.example.hogwatch.shared.LocalConfig
+import com.example.hogwatch.shared.SightingExtraData
 import com.example.hogwatch.shared.Sightings
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -62,6 +63,59 @@ object NetworkClient {
       } catch (e: Exception) {
          println("Exception: ${e.message}")
          false
+      }
+   }
+
+   suspend fun getMapPins(
+      minLat: Double,
+      maxLat: Double,
+      minLon: Double,
+      maxLon: Double
+   ): Sightings {
+      val http = client?.takeIf { it.isActive } ?: return Sightings()
+
+      return try {
+         val response = http.get {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("pins", "$minLat", "$maxLat", "$minLon", "$maxLon")
+            }
+         }
+
+         if (response.status.isSuccess())
+            response.body()
+         else
+            Sightings()
+
+      } catch (e: Exception) {
+         println("Failed to fetch pins: ${e.message}")
+         Sightings()
+      }
+   }
+
+   suspend fun getMapPinInfo(id: Int) : SightingExtraData? {
+      val http = client?.takeIf { it.isActive } ?: return null
+
+      return try {
+         val response = http.get {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("sighting", "$id", "image")
+            }
+         }
+
+         if (response.status.isSuccess())
+            SightingExtraData(id, response.body<String>())
+         else
+            null
+
+      } catch (e: Exception) {
+         println("Failed to fetch image: ${e.message}")
+         null
       }
    }
 

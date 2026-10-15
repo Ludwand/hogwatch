@@ -9,6 +9,10 @@ import java.sql.SQLException
 import java.util.Properties
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
+import kotlin.random.Random
+import java.util.Base64
+import java.io.File
+
 
 object Database {
    private var conn: Connection
@@ -35,6 +39,25 @@ object Database {
       val image: String?,
       val isAlive: String
    )
+
+   fun seedTestSightings() {
+      val imageBytes = File(
+         "../frontend/app/src/main/res/drawable/hedgehog_pic.jpg"
+      ).readBytes()
+
+      val imageBase64 = Base64.getEncoder().encodeToString(imageBytes)
+
+      repeat(10) { i ->
+         insertSighting(
+            userid = "test-user-$i",
+            lat = Random.nextDouble(57.6, 57.9),
+            long = Random.nextDouble(11.8, 12.2),
+            time = System.currentTimeMillis() / 1000,
+            image = imageBase64,
+            isAlive = "Alive"
+         )
+      }
+   }
 
    fun insertSighting(
       userid: String?,

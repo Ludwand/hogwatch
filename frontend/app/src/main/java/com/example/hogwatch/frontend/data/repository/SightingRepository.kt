@@ -25,6 +25,4 @@ object SightingRepository {
       )
       return NetworkClient.sendSightingToServer(manualSubmissionSend)
    }
-
-
 }
