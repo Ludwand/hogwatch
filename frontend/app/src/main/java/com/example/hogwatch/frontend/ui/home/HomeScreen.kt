@@ -40,7 +40,6 @@ fun HomeScreen(
    onNavigateToCameraReport: () -> Unit,
    onNavigateToMap: () -> Unit,
    onNavigateToInfo: () -> Unit,
-   onNavigateToSound: () -> Unit,
    onNavigateToAbout: () -> Unit
 ) {
    HomeScreenContent(
@@ -48,8 +47,7 @@ fun HomeScreen(
       onCameraReportClick = onNavigateToCameraReport,
       onMapClick = onNavigateToMap,
       onInfoClick = onNavigateToInfo,
-      onAboutClick = onNavigateToAbout,
-      onSoundClick = onNavigateToSound
+      onAboutClick = onNavigateToAbout
    )
 }
 
@@ -59,7 +57,6 @@ fun HomeScreenContent(
    onCameraReportClick: () -> Unit,
    onInfoClick: () -> Unit,
    onMapClick: () -> Unit,
-   onSoundClick: () -> Unit,
    onAboutClick: () -> Unit
 ) {
    StartupDialog()
@@ -81,7 +78,6 @@ fun HomeScreenContent(
                HomeMenu(
                   onInfoClick = onInfoClick,
                   onAboutClick = onAboutClick,
-                  onSoundClick = onSoundClick,
                   onMapClick = onMapClick
                )
             }
@@ -95,7 +91,7 @@ fun HomeScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
          ) {
 
-
+            Text("HogWatch")
 
             Spacer(modifier = Modifier.height(200.dp))
 
