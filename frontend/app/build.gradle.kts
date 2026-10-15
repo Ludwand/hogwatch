@@ -38,9 +38,7 @@ kotlin {
 }
 
 dependencies {
-   implementation("com.google.maps.android:maps-compose-utils:8.4.0")
    implementation(libs.androidx.compose.foundation)
-   implementation(libs.maps.compose)
    implementation(platform(libs.androidx.compose.bom))
    implementation(libs.androidx.activity.compose)
    implementation(libs.androidx.compose.material3)
@@ -73,6 +71,10 @@ dependencies {
    implementation(libs.androidx.compose.material.icons)
    implementation(libs.play.services.maps)
    implementation(libs.play.services.location)
+
+   //maps
+   implementation(libs.maps.compose)
+   implementation(libs.maps.compose.utils)
 
 }
 

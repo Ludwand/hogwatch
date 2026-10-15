@@ -170,12 +170,7 @@ fun ManualSubmitContent(
 
 
 
-         if (uiState.errorMessage != null) {
-            Text(
-               text = uiState.errorMessage,
-               color = MaterialTheme.colorScheme.error
-            )
-         }
+
 
          //https://developer.android.com/develop/ui/compose/components/radio-button
          Column(modifier.selectableGroup()) {
@@ -203,6 +198,12 @@ fun ManualSubmitContent(
                   )
                }
             }
+         }
+         if (uiState.errorMessage != null) {
+            Text(
+               text = uiState.errorMessage,
+               color = MaterialTheme.colorScheme.error
+            )
          }
          Spacer(modifier = Modifier.weight(1f))
 
