@@ -146,5 +146,17 @@ fun Application.configureRouting() {
             call.respond(HttpStatusCode.BadRequest, "Problem occurred!")
          }
       }
+
+      delete("/sightings/{id}/{userid}") {
+         try {
+            val id = call.parameters["id"]?.toInt() ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val userid = call.parameters["userid"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            if (Database.deleteSighting(id, userid)) call.respond(HttpStatusCode.OK)
+            else call.respond(HttpStatusCode.Unauthorized)
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
    }
 }
