@@ -20,7 +20,7 @@ import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
 import com.google.android.gms.location.LocationServices
-
+import com.example.hogwatch.frontend.ui.sound.SoundScreen
 
 class MainActivity : ComponentActivity() {
    //private val locationRepository = LocationRepository(application.applicationContext) //Get current location
@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
                      onNavigateToCameraReport = { navController.navigate("CameraScreen") },
                      onNavigateToMap = { navController.navigate("MapScreen") },
                      onNavigateToInfo = { navController.navigate("InfoScreen") },
+                     onNavigateToSound = { navController.navigate("SoundScreen") },
                      onNavigateToAbout = { }) //TODO: add navigation
                }
                composable("CameraScreen") {
@@ -58,6 +59,9 @@ class MainActivity : ComponentActivity() {
                }
                composable("InfoScreen") {
                   InfoScreen(onNavigateBack = { navController.popBackStack() })
+               }
+               composable("SoundScreen") {
+                  SoundScreen(onNavigateBack = { navController.popBackStack() })
                }
             }
          }
