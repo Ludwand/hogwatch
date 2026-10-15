@@ -1,3 +1,4 @@
+
 package com.example.hogwatch.frontend.ui.home
 
 import androidx.compose.foundation.Image
@@ -40,6 +41,7 @@ fun HomeScreen(
    onNavigateToCameraReport: () -> Unit,
    onNavigateToMap: () -> Unit,
    onNavigateToInfo: () -> Unit,
+   onNavigateToSound: () -> Unit,
    onNavigateToAbout: () -> Unit
 ) {
    HomeScreenContent(
@@ -47,7 +49,8 @@ fun HomeScreen(
       onCameraReportClick = onNavigateToCameraReport,
       onMapClick = onNavigateToMap,
       onInfoClick = onNavigateToInfo,
-      onAboutClick = onNavigateToAbout
+      onAboutClick = onNavigateToAbout,
+      onSoundClick = onNavigateToSound
    )
 }
 
@@ -57,6 +60,7 @@ fun HomeScreenContent(
    onCameraReportClick: () -> Unit,
    onInfoClick: () -> Unit,
    onMapClick: () -> Unit,
+   onSoundClick: () -> Unit,
    onAboutClick: () -> Unit
 ) {
    StartupDialog()
@@ -78,6 +82,7 @@ fun HomeScreenContent(
                HomeMenu(
                   onInfoClick = onInfoClick,
                   onAboutClick = onAboutClick,
+                  onSoundClick = onSoundClick,
                   onMapClick = onMapClick
                )
             }
@@ -91,7 +96,7 @@ fun HomeScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
          ) {
 
-            Text("HogWatch")
+
 
             Spacer(modifier = Modifier.height(200.dp))
 
@@ -152,9 +157,9 @@ fun StartupDialog() {
                   painter = painterResource(id = R.drawable.sleephog), // Replace with your image name
                   contentDescription = "Hedgehog Pic",
                   modifier = Modifier
-                      .fillMaxWidth()
-                      .height(140.dp)
-                      .clip(RoundedCornerShape(8.dp)),
+                     .fillMaxWidth()
+                     .height(140.dp)
+                     .clip(RoundedCornerShape(8.dp)),
                   contentScale = ContentScale.Crop
                )
 
@@ -175,3 +180,4 @@ fun StartupDialog() {
       )
    }
 }
+

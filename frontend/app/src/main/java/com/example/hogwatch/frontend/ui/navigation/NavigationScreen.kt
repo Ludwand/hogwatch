@@ -1,3 +1,4 @@
+
 package com.example.hogwatch.frontend.ui.navigation
 
 import androidx.compose.foundation.layout.Arrangement
@@ -20,13 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/*This menu is AI-generated for a fast placeholder menu and will be replaced*/
 
 
 @Composable
 fun HomeMenu(
    onInfoClick: () -> Unit,
    onAboutClick: () -> Unit,
+   onSoundClick: () -> Unit,
    onMapClick: () -> Unit
 ) {
 
@@ -70,6 +71,13 @@ fun HomeMenu(
                onClick = {
                   isExpanded = false
                   onInfoClick()
+               }
+            )
+            DropdownMenuItem(
+               text = { Text("Hedgehog Sounds") },
+               onClick = {
+                  isExpanded = false
+                  onSoundClick()
                }
             )
          }
