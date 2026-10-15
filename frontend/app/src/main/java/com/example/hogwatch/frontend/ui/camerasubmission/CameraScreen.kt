@@ -3,7 +3,10 @@ package com.example.hogwatch.frontend.ui.camerasubmission
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,7 +48,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.io.ByteArrayOutputStream
 import java.io.File
+import android.widget.Toast
 
 @Composable
 fun CameraScreen(
@@ -53,6 +58,20 @@ fun CameraScreen(
 ) {
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
    val context = LocalContext.current
+
+   LaunchedEffect(uiState.errorMessage) {
+      uiState.errorMessage?.let { message ->
+         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+         viewModel.clearErrorMessage()
+      }
+   }
+
+   LaunchedEffect(uiState.isSubmittedSuccess) {
+      if (uiState.isSubmittedSuccess) {
+         Toast.makeText(context, "Sighting submitted successfully!", Toast.LENGTH_SHORT).show()
+         viewModel.clearSuccessMessage()
+      }
+   }
 
    var hasCameraPermission by remember {
       mutableStateOf(
@@ -202,10 +221,51 @@ private fun takePhoto(
       ContextCompat.getMainExecutor(context),
       object : ImageCapture.OnImageSavedCallback {
          override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-            val imageBytes = photoFile.readBytes()
-            photoFile.delete()
-            val base64Image = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
-            onPhotoCaptured(base64Image)
+            val filePath = photoFile.absolutePath
+            val originalBitmap = BitmapFactory.decodeFile(filePath)
+
+            if (originalBitmap != null) {
+               // read rotation
+               val exif = ExifInterface(filePath)
+               val orientation = exif.getAttributeInt(
+                  ExifInterface.TAG_ORIENTATION,
+                  ExifInterface.ORIENTATION_NORMAL
+               )
+
+               val rotationDegrees = when (orientation) {
+                  ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                  ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                  ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                  else -> 0f
+               }
+
+               // rotate if needed
+               val rotatedBitmap = if (rotationDegrees != 0f) {
+                  val matrix = Matrix().apply { postRotate(rotationDegrees) }
+                  val rotated = Bitmap.createBitmap(
+                     originalBitmap, 0, 0,
+                     originalBitmap.width, originalBitmap.height,
+                     matrix, true
+                  )
+                  originalBitmap.recycle()
+                  rotated
+               } else {
+                  originalBitmap
+               }
+
+               val outputStream = ByteArrayOutputStream()
+               rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
+               val compressedBytes = outputStream.toByteArray()
+               rotatedBitmap.recycle() // Free memory
+
+               // Base 64
+               val base64Image = Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
+
+               // cleanup
+               photoFile.delete()
+
+               onPhotoCaptured(base64Image)
+            }
          }
 
          override fun onError(exception: ImageCaptureException) {
