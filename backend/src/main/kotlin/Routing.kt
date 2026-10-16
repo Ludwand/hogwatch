@@ -13,17 +13,33 @@ import java.time.format.DateTimeFormatter
 import com.example.hogwatch.shared.SightingSummary
 import com.example.hogwatch.shared.Sightings
 import io.ktor.server.plugins.origin
+import java.util.PriorityQueue
 import kotlin.random.Random
 
-const val MIN_SUBMISSION_DELAY = 60 * 1000L
+const val MAX_SUBMISSION_PERIOD = 60 * 1000L
+const val MAX_SUBMISSIONS_IN_PERIOD = 10
 
 object LatestSubmission {
-   private var data = HashMap<String, Long>()
+   private val counts = HashMap<String, Int>()
+   private val times = PriorityQueue<QueueEntry>()
+
+   private data class QueueEntry(val time: Long, val addr: String) : Comparable<QueueEntry> {
+      override fun compareTo(other: QueueEntry): Int {
+         return this.time.compareTo(other.time)
+      }
+   }
 
    fun canSubmit(addr: String): Boolean {
       val now = System.currentTimeMillis()
-      val old = data.put(addr, now)
-      return old == null || now - old > MIN_SUBMISSION_DELAY
+      while (times.isNotEmpty() && times.peek().time < (now - MAX_SUBMISSION_PERIOD)) {
+         val entry = times.poll()
+         val prev = counts[entry.addr] ?: continue
+         counts[entry.addr] = prev - 1
+      }
+
+      val prev = counts[addr] ?: 0
+      counts[addr] = prev + 1
+      return (prev) < MAX_SUBMISSIONS_IN_PERIOD
    }
 }
 
@@ -144,6 +160,18 @@ fun Application.configureRouting() {
          } catch (e: Exception) {
             println("Exception ${e.message}")
             call.respond(HttpStatusCode.BadRequest, "Problem occurred!")
+         }
+      }
+
+      delete("/sightings/{id}/{userid}") {
+         try {
+            val id = call.parameters["id"]?.toInt() ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val userid = call.parameters["userid"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            if (Database.deleteSighting(id, userid)) call.respond(HttpStatusCode.OK)
+            else call.respond(HttpStatusCode.Unauthorized)
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
          }
       }
    }

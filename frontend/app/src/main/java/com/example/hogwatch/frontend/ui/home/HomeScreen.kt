@@ -1,3 +1,4 @@
+
 package com.example.hogwatch.frontend.ui.home
 
 import androidx.compose.foundation.Image
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
@@ -39,6 +41,8 @@ fun HomeScreen(
    onNavigateToCameraReport: () -> Unit,
    onNavigateToMap: () -> Unit,
    onNavigateToInfo: () -> Unit,
+   onNavigateToSound: () -> Unit,
+   onNavigateToRescue: () -> Unit,
    onNavigateToAbout: () -> Unit
 ) {
    HomeScreenContent(
@@ -46,7 +50,9 @@ fun HomeScreen(
       onCameraReportClick = onNavigateToCameraReport,
       onMapClick = onNavigateToMap,
       onInfoClick = onNavigateToInfo,
-      onAboutClick = onNavigateToAbout
+      onAboutClick = onNavigateToAbout,
+      onRescueClick = onNavigateToRescue,
+      onSoundClick = onNavigateToSound
    )
 }
 
@@ -56,40 +62,54 @@ fun HomeScreenContent(
    onCameraReportClick: () -> Unit,
    onInfoClick: () -> Unit,
    onMapClick: () -> Unit,
+   onSoundClick: () -> Unit,
+   onRescueClick: () -> Unit,
    onAboutClick: () -> Unit
 ) {
    StartupDialog()
 
-   Scaffold(
-      modifier = Modifier.fillMaxSize(),
-      topBar = {
-         Box(modifier = Modifier.statusBarsPadding()) {
-            HomeMenu(
-               onInfoClick = onInfoClick,
-               onAboutClick = onAboutClick,
-               onMapClick = onMapClick
-            )
+   //bakgrund
+   Box(modifier = Modifier.fillMaxSize()) {
+      Image(
+         painter = painterResource(id = R.drawable.hog_background), //bild
+         contentDescription = null,
+         modifier = Modifier.fillMaxSize(),
+         contentScale = ContentScale.Crop // fyller skärmen
+      )
+
+      Scaffold(
+         modifier = Modifier.fillMaxSize(),
+         containerColor = Color.Transparent,
+         topBar = {
+            Box(modifier = Modifier.statusBarsPadding()) {
+               HomeMenu(
+                  onInfoClick = onInfoClick,
+                  onAboutClick = onAboutClick,
+                  onSoundClick = onSoundClick,
+                  onRescueClick = onRescueClick,
+                  onMapClick = onMapClick
+               )
+            }
+
+         }) { innerPadding ->
+         Column(
+            modifier = Modifier
+               .fillMaxSize()
+               .padding(innerPadding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+         ) {
+
+
+
+            Spacer(modifier = Modifier.height(200.dp))
+
+            CameraButton(onCameraReportClick = onCameraReportClick)
+            Spacer(modifier = Modifier.height((24.dp)))
+            ManualButton(onManualReportClick = onManualReportClick)
          }
-
-      }) { innerPadding ->
-      Column(
-         modifier = Modifier
-             .fillMaxSize()
-             .padding(innerPadding),
-         verticalArrangement = Arrangement.Center,
-         horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-
-         Text("HogWatch")
-
-         Spacer(modifier = Modifier.height(200.dp))
-
-         CameraButton(onCameraReportClick = onCameraReportClick)
-         Spacer(modifier = Modifier.height((24.dp)))
-         ManualButton(onManualReportClick = onManualReportClick)
       }
    }
-
 }
 
 @Composable
@@ -141,9 +161,9 @@ fun StartupDialog() {
                   painter = painterResource(id = R.drawable.sleephog), // Replace with your image name
                   contentDescription = "Hedgehog Pic",
                   modifier = Modifier
-                      .fillMaxWidth()
-                      .height(140.dp)
-                      .clip(RoundedCornerShape(8.dp)),
+                     .fillMaxWidth()
+                     .height(140.dp)
+                     .clip(RoundedCornerShape(8.dp)),
                   contentScale = ContentScale.Crop
                )
 
@@ -164,3 +184,4 @@ fun StartupDialog() {
       )
    }
 }
+

@@ -15,7 +15,9 @@ import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
 import com.example.hogwatch.frontend.data.repository.UserManager
+import com.example.hogwatch.frontend.ui.sound.SoundScreen
 import com.example.hogwatch.frontend.ui.home.HomeScreen
+import com.example.hogwatch.frontend.ui.rescue.RescueScreen
 import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
@@ -45,6 +47,8 @@ class MainActivity : ComponentActivity() {
                      onNavigateToCameraReport = { navController.navigate("CameraScreen") },
                      onNavigateToMap = { navController.navigate("MapScreen") },
                      onNavigateToInfo = { navController.navigate("InfoScreen") },
+                     onNavigateToSound = { navController.navigate("SoundScreen") },
+                     onNavigateToRescue = { navController.navigate("RescueScreen") },
                      onNavigateToAbout = { }) //TODO: add navigation
                }
                composable("CameraScreen") {
@@ -58,6 +62,12 @@ class MainActivity : ComponentActivity() {
                }
                composable("InfoScreen") {
                   InfoScreen(onNavigateBack = { navController.popBackStack() })
+               }
+               composable("SoundScreen") {
+                  SoundScreen(onNavigateBack = { navController.popBackStack() })
+               }
+               composable("RescueScreen") {
+                  RescueScreen(onNavigateBack = { navController.popBackStack() })
                }
             }
          }

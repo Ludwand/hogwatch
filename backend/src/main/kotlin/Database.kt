@@ -190,4 +190,18 @@ object Database {
       }
       return ret
    }
+
+   fun deleteSighting(id: Int, userid: String): Boolean {
+      try {
+         conn.prepareStatement("DELETE FROM Sightings WHERE id = ? AND userid = ?")
+            .use<PreparedStatement, Unit> { st ->
+               st.setInt(1, id)
+               st.setString(2, userid)
+               return st.executeUpdate() > 0
+            }
+      } catch (e: SQLException) {
+         println(e)
+      }
+      return false
+   }
 }
