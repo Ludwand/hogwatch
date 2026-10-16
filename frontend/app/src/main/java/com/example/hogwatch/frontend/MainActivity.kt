@@ -4,14 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.navigation.NavController
 import com.example.hogwatch.frontend.ui.theme.SrcTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hogwatch.frontend.data.remote.NetworkClient
-import com.example.hogwatch.frontend.data.repository.LocationRepository
-import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
 import com.example.hogwatch.frontend.data.repository.UserManager
@@ -21,7 +18,6 @@ import com.example.hogwatch.frontend.ui.rescue.RescueScreen
 import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
-import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : ComponentActivity() {
@@ -52,10 +48,10 @@ class MainActivity : ComponentActivity() {
                      onNavigateToAbout = { }) //TODO: add navigation
                }
                composable("CameraScreen") {
-                  CameraScreen()
+                  CameraScreen(onNavigateBack = { navController.popBackStack() } , onNavigateMap = { navController.navigate("MapScreen") })
                }
                composable("ManualScreen") {
-                  ManualSubmitScreen(onNavigateBack = { navController.popBackStack() })
+                  ManualSubmitScreen(onNavigateBack = { navController.popBackStack() } , onNavigateMap = { navController.navigate("MapScreen") })
                }
                composable("MapScreen") {
                   MapScreen()

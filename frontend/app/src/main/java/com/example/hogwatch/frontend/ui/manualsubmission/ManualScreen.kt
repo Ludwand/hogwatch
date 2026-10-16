@@ -1,16 +1,13 @@
 package com.example.hogwatch.frontend.ui.manualsubmission
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,8 +26,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
-import com.example.hogwatch.frontend.ui.manualsubmission.SelectedPhotoPreview
-import java.nio.file.WatchEvent
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -41,13 +36,15 @@ import java.util.Locale
 @Composable
 fun ManualSubmitScreen(
    viewModel: ManualViewModel = viewModel(),
-   onNavigateBack: () -> Unit
+   onNavigateBack: () -> Unit,
+   onNavigateMap: () -> Unit
 ) {
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
    LaunchedEffect(uiState.isSubmittedSuccess) {
       if (uiState.isSubmittedSuccess) {
          onNavigateBack()
+         onNavigateMap()
       }
    }
 

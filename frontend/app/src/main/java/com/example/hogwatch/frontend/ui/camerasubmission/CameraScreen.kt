@@ -54,10 +54,19 @@ import android.widget.Toast
 
 @Composable
 fun CameraScreen(
-   viewModel: CameraViewModel = viewModel()
+    viewModel: CameraViewModel = viewModel(),
+    onNavigateBack: () -> Unit,
+    onNavigateMap: () -> Unit
 ) {
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
    val context = LocalContext.current
+
+   LaunchedEffect(uiState.isSubmittedSuccess) {
+      if (uiState.isSubmittedSuccess) {
+         onNavigateBack()
+         onNavigateMap()
+      }
+   }
 
    LaunchedEffect(uiState.errorMessage) {
       uiState.errorMessage?.let { message ->
