@@ -3,44 +3,26 @@ package com.example.hogwatch.frontend.ui.manualsubmission
 
 import android.Manifest
 import android.app.Application
-import android.location.Location
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.net.Uri
 import androidx.annotation.RequiresPermission
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.SelectableDates
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.example.hogwatch.frontend.data.remote.NetworkClient
 import com.example.hogwatch.frontend.data.repository.LocationRepository
 import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.data.repository.UserManager
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
+import kotlinx.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
+import android.util.Base64
 
 //https://developer.android.com/topic/architecture/ui-layer/stateholders
 data class ManualReportUiState(
@@ -55,7 +37,7 @@ data class ManualReportUiState(
    var showTimePicker: Boolean = false,
    var isAlive: String = "Alive",
    val radioOptions: List<String> = listOf("Alive", "Injured", "Deceased"),
-   var photo: String? = null
+   var photo: Uri? = null
 )
 
 class ManualViewModel(application: Application) : AndroidViewModel(application) {
@@ -81,7 +63,7 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       if (lat == null || lon == null) {
          _uiState.update { it.copy(errorMessage = "Latitude or longitude isn't correct formated") }
          return
-      } else if (!inSweden(lat, lon)){ // https://sv.wikipedia.org/wiki/Sveriges_ytterpunkter
+      } else if (!inSweden(lat, lon)) { // https://sv.wikipedia.org/wiki/Sveriges_ytterpunkter
          _uiState.update { it.copy(errorMessage = "The sighting must be in Sweden") }
          return
       }
@@ -97,13 +79,26 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
          _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
          try {
             val userId = userManager.getUserId()
-
-            if (SightingRepository.submit(userId, lat, lon, epochSeconds, state.photo, state.isAlive)){
-               _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = true) }
-            } else {
-               _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = false, errorMessage = "Submission failed due to a network error.") }
+            var photoString: String? = null
+            if (state.photo != null) {
+               photoString = getBase64ForUriAndPossiblyCrash(state.photo!!)
             }
 
+            if (SightingRepository.submit(
+                  userId, lat, lon, epochSeconds,
+                  photoString, state.isAlive
+               )
+            ) {
+               _uiState.update { it.copy(isSubmitting = false, isSubmittedSuccess = true) }
+            } else {
+               _uiState.update {
+                  it.copy(
+                     isSubmitting = false,
+                     isSubmittedSuccess = false,
+                     errorMessage = "Submission failed due to a network error."
+                  )
+               }
+            }
 
 
          } catch (e: Exception) {
@@ -139,10 +134,10 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       val parsedNewTime = LocalTime.parse(newTime, formatter)
       val now = LocalTime.now()
 
-      if ((uiState.value.date.compareTo(initialDate) == 0) && (parsedNewTime.isAfter(now))){
+      if ((uiState.value.date.compareTo(initialDate) == 0) && (parsedNewTime.isAfter(now))) {
          _uiState.update { it.copy(errorMessage = "You can't report a hedgehog in the future.") }
          _uiState.update { it.copy(time = now.format(DateTimeFormatter.ofPattern("HH:mm"))) }
-      } else{
+      } else {
          _uiState.update { it.copy(time = newTime) }
       }
 
@@ -157,12 +152,16 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       _uiState.update { it.copy(latitudeString = lat) }
    }
 
-   fun onRadioButton(option: String){
+   fun onRadioButton(option: String) {
       _uiState.update { it.copy(isAlive = option) }
    }
 
-   fun onAddPhoto(photo: String){
+   fun onAddPhoto(photo: Uri) {
+      _uiState.update { it.copy(photo = photo) }
+   }
 
+   fun onRemovePhoto() {
+      _uiState.update { it.copy(photo = null) }
    }
 
    //https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html#atTime-int-int-
@@ -176,7 +175,8 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       }
    }
 
-   fun inSweden(lat: Double, lon: Double): Boolean{
+
+   fun inSweden(lat: Double, lon: Double): Boolean {
       val maxLat = 69.0336
       val minLat = 55.2013
       val maxLon = 24.100
@@ -185,12 +185,18 @@ class ManualViewModel(application: Application) : AndroidViewModel(application) 
       return lat in minLat..maxLat && lon in minLon..maxLon
    }
 
-   fun getIsAliveInt(): Int {
-      return when (uiState.value.isAlive) {
-         "Alive" -> 0
-         "Injured" -> 1
-         "Deceased" -> 2
-         else -> -1
+   // Source - https://stackoverflow.com/a/57770481
+// Posted by CommonsWare
+// Retrieved 2026-10-15, License - CC BY-SA 4.0
+   //Modified to fit our application
+
+   private fun getBase64ForUriAndPossiblyCrash(uri: Uri): String? {
+      try {
+         val bytes = application.contentResolver.openInputStream(uri)?.readBytes()
+         return Base64.encodeToString(bytes, Base64.DEFAULT)!!
+      } catch (error: IOException) {
+         error.printStackTrace() // This exception always occurs
+         return null
       }
    }
 }

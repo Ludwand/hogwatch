@@ -1,22 +1,36 @@
 package com.example.hogwatch.frontend.ui.manualsubmission
 
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
+import com.example.hogwatch.frontend.ui.manualsubmission.SelectedPhotoPreview
+import java.nio.file.WatchEvent
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -37,6 +51,15 @@ fun ManualSubmitScreen(
       }
    }
 
+   //https://developer.android.com/training/data-storage/shared/photo-picker
+   val pickMedia = rememberLauncherForActivityResult(
+      contract = ActivityResultContracts.PickVisualMedia()
+   ) { uri: Uri? ->
+      if (uri != null) {
+         viewModel.onAddPhoto(uri)
+      }
+   }
+
    val permission = rememberLocationPermission(
       onPermissionGranted = viewModel::fetchUserLocation
    )
@@ -50,7 +73,13 @@ fun ManualSubmitScreen(
       onFetchLocation = permission.requestPermission,
       onSubmit = viewModel::onSubmit,
       onRadioButton = viewModel::onRadioButton,
-      onAddPhoto = viewModel::onAddPhoto
+      onAddPhotoClick = {
+         pickMedia.launch(
+            PickVisualMediaRequest
+               (ActivityResultContracts.PickVisualMedia.ImageOnly)
+         )
+      },
+      onRemovePhoto = viewModel::onRemovePhoto
    )
 }
 
@@ -66,7 +95,8 @@ fun ManualSubmitContent(
    onSubmit: () -> Unit,
    modifier: Modifier = Modifier,
    onRadioButton: (String) -> Unit,
-   onAddPhoto: (String) -> Unit
+   onAddPhotoClick: () -> Unit,
+   onRemovePhoto: () -> Unit
 ) {
    var showDatePicker by remember { mutableStateOf(false) }
    val datePickerState = rememberDatePickerState(
@@ -167,15 +197,17 @@ fun ManualSubmitContent(
             Text("Use my location")
          }
 
-         Button(
-            onClick = {  }
-         ) {
-            Text("Add photo")
+         //https://www.youtube.com/watch?v=XEdC0s9e3NA
+         if (uiState.photo != null) {
+            SelectedPhotoPreview(
+               photo = uiState.photo!!,
+               onRemovePhoto = onRemovePhoto
+            )
+         } else {
+            Button(onClick = onAddPhotoClick) {
+               Text("Add photo")
+            }
          }
-
-
-
-
 
          //https://developer.android.com/develop/ui/compose/components/radio-button
          Column(modifier.selectableGroup()) {
@@ -318,4 +350,34 @@ object NoFutureDates : SelectableDates {
 
    override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis <= todayMillis
    override fun isSelectableYear(year: Int) = year in yearRange
+}
+//https://www.youtube.com/watch?v=XEdC0s9e3NA
+@Composable
+fun SelectedPhotoPreview(
+   photo: Uri,
+   onRemovePhoto: () -> Unit,
+   modifier: Modifier = Modifier
+) {
+   Box(
+      modifier = modifier
+         .size(110.dp)
+   ) {
+      AsyncImage(
+         model = photo,
+         contentDescription = "Selected photo",
+         modifier = Modifier
+            .clip(RoundedCornerShape(8.dp)),
+         contentScale = ContentScale.Crop // Make a square
+      )
+
+      IconButton(
+         onClick = onRemovePhoto,
+      ) {
+         Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = "Remove photo",
+            modifier = Modifier.size(18.dp)
+         )
+      }
+   }
 }
