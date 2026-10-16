@@ -42,6 +42,7 @@ fun HomeScreen(
    onNavigateToMap: () -> Unit,
    onNavigateToInfo: () -> Unit,
    onNavigateToSound: () -> Unit,
+   onNavigateToRescue: () -> Unit,
    onNavigateToAbout: () -> Unit
 ) {
    HomeScreenContent(
@@ -50,6 +51,7 @@ fun HomeScreen(
       onMapClick = onNavigateToMap,
       onInfoClick = onNavigateToInfo,
       onAboutClick = onNavigateToAbout,
+      onRescueClick = onNavigateToRescue,
       onSoundClick = onNavigateToSound
    )
 }
@@ -61,6 +63,7 @@ fun HomeScreenContent(
    onInfoClick: () -> Unit,
    onMapClick: () -> Unit,
    onSoundClick: () -> Unit,
+   onRescueClick: () -> Unit,
    onAboutClick: () -> Unit
 ) {
    StartupDialog()
@@ -83,6 +86,7 @@ fun HomeScreenContent(
                   onInfoClick = onInfoClick,
                   onAboutClick = onAboutClick,
                   onSoundClick = onSoundClick,
+                  onRescueClick = onRescueClick,
                   onMapClick = onMapClick
                )
             }

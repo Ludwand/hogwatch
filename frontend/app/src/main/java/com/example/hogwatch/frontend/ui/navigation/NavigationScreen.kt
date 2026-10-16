@@ -28,7 +28,8 @@ fun HomeMenu(
    onInfoClick: () -> Unit,
    onAboutClick: () -> Unit,
    onSoundClick: () -> Unit,
-   onMapClick: () -> Unit
+   onMapClick: () -> Unit,
+   onRescueClick: () -> Unit
 ) {
 
    var isExpanded by remember { mutableStateOf(false) }
@@ -60,13 +61,6 @@ fun HomeMenu(
                }
             )
             DropdownMenuItem(
-               text = { Text("About HogWatch") },
-               onClick = {
-                  isExpanded = false
-                  onAboutClick()
-               }
-            )
-            DropdownMenuItem(
                text = { Text("Info Hedgehogs") },
                onClick = {
                   isExpanded = false
@@ -78,6 +72,20 @@ fun HomeMenu(
                onClick = {
                   isExpanded = false
                   onSoundClick()
+               }
+            )
+            DropdownMenuItem(
+               text = { Text("Rescue Guide") },
+               onClick = {
+                  isExpanded = false
+                  onRescueClick()
+               }
+            )
+            DropdownMenuItem(
+               text = { Text("About HogWatch") },
+               onClick = {
+                  isExpanded = false
+                  onAboutClick()
                }
             )
          }
