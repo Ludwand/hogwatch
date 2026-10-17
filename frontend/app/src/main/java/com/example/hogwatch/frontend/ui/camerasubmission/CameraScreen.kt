@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import androidx.exifinterface.media.ExifInterface
 import android.util.Base64
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -16,20 +16,28 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,43 +50,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.io.ByteArrayOutputStream
 import java.io.File
-import android.widget.Toast
 
 @Composable
 fun CameraScreen(
-    viewModel: CameraViewModel = viewModel(),
-    onNavigateBack: () -> Unit,
-    onNavigateMap: () -> Unit
+   viewModel: CameraViewModel = viewModel(),
+   onNavigateBack: () -> Unit,
+   onNavigateMap: () -> Unit
 ) {
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
    val context = LocalContext.current
 
+   //success toast
    LaunchedEffect(uiState.isSubmittedSuccess) {
       if (uiState.isSubmittedSuccess) {
+         Toast.makeText(context, "Sighting submitted successfully!", Toast.LENGTH_SHORT).show()
+         viewModel.clearSuccessMessage()
          onNavigateBack()
          onNavigateMap()
       }
    }
 
+   //error toast
    LaunchedEffect(uiState.errorMessage) {
       uiState.errorMessage?.let { message ->
          Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
          viewModel.clearErrorMessage()
-      }
-   }
-
-   LaunchedEffect(uiState.isSubmittedSuccess) {
-      if (uiState.isSubmittedSuccess) {
-         Toast.makeText(context, "Sighting submitted successfully!", Toast.LENGTH_SHORT).show()
-         viewModel.clearSuccessMessage()
       }
    }
 
@@ -112,7 +118,10 @@ fun CameraScreen(
          }
       },
       onRetakeClick = { viewModel.onRetakePhoto() },
-      onSubmitClick = { viewModel.onSubmit() }
+      onSubmitClick = { viewModel.onSubmitClick() }, // Triggers the dialog popup
+      onStatusSelected = { status -> viewModel.onStatusSelected(status) },
+      onConfirmSubmission = { viewModel.confirmSubmission() },
+      onDismissDialog = { viewModel.onDismissStatusDialog() }
    )
 }
 
@@ -123,7 +132,10 @@ fun CameraContent(
    imageCapture: ImageCapture,
    onCaptureClick: () -> Unit,
    onRetakeClick: () -> Unit,
-   onSubmitClick: () -> Unit
+   onSubmitClick: () -> Unit,
+   onStatusSelected: (String) -> Unit,
+   onConfirmSubmission: () -> Unit,
+   onDismissDialog: () -> Unit
 ) {
    val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -136,9 +148,8 @@ fun CameraContent(
          return@Box
       }
 
-      //Preview
+      // Preview
       if (uiState.capturedImageBase64 != null) {
-         // Converts Base64 String back to Bitmap
          val imageBytes = Base64.decode(uiState.capturedImageBase64, Base64.DEFAULT)
          val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 
@@ -214,6 +225,54 @@ fun CameraContent(
                .border(BorderStroke(4.dp, Color.White), CircleShape)
          ) {}
       }
+
+      // Condition dialog
+      if (uiState.showStatusDialog) {
+         val statusOptions = listOf("Alive", "Injured", "Deceased")
+
+         AlertDialog(
+            onDismissRequest = onDismissDialog,
+            title = { Text(text = "Hedgehog Condition") },
+            text = {
+               Column(Modifier.selectableGroup()) {
+                  statusOptions.forEach { text ->
+                     Row(
+                        Modifier
+                           .fillMaxWidth()
+                           .height(48.dp)
+                           .selectable(
+                              selected = (text == uiState.selectedStatus),
+                              onClick = { onStatusSelected(text) },
+                              role = Role.RadioButton
+                           )
+                           .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                     ) {
+                        RadioButton(
+                           selected = (text == uiState.selectedStatus),
+                           onClick = null
+                        )
+                        Text(
+                           text = text,
+                           style = MaterialTheme.typography.bodyLarge,
+                           modifier = Modifier.padding(start = 16.dp)
+                        )
+                     }
+                  }
+               }
+            },
+            confirmButton = {
+               TextButton(onClick = onConfirmSubmission) {
+                  Text("Submit")
+               }
+            },
+            dismissButton = {
+               TextButton(onClick = onDismissDialog) {
+                  Text("Cancel")
+               }
+            }
+         )
+      }
    }
 }
 
@@ -234,7 +293,6 @@ private fun takePhoto(
             val originalBitmap = BitmapFactory.decodeFile(filePath)
 
             if (originalBitmap != null) {
-               // read rotation
                val exif = ExifInterface(filePath)
                val orientation = exif.getAttributeInt(
                   ExifInterface.TAG_ORIENTATION,
@@ -248,7 +306,6 @@ private fun takePhoto(
                   else -> 0f
                }
 
-               // rotate if needed
                val rotatedBitmap = if (rotationDegrees != 0f) {
                   val matrix = Matrix().apply { postRotate(rotationDegrees) }
                   val rotated = Bitmap.createBitmap(
@@ -265,12 +322,9 @@ private fun takePhoto(
                val outputStream = ByteArrayOutputStream()
                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
                val compressedBytes = outputStream.toByteArray()
-               rotatedBitmap.recycle() // Free memory
+               rotatedBitmap.recycle()
 
-               // Base 64
                val base64Image = Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
-
-               // cleanup
                photoFile.delete()
 
                onPhotoCaptured(base64Image)

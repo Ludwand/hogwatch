@@ -19,7 +19,9 @@ data class CameraUiState(
    val capturedImageBase64: String? = null, //preview image
    val isSubmitting: Boolean = false,
    val errorMessage: String? = null,
-   val isSubmittedSuccess: Boolean = false
+   val isSubmittedSuccess: Boolean = false,
+   val showStatusDialog: Boolean = false,
+   val selectedStatus: String = "Alive"
 )
 
 class CameraViewModel(application: Application) : AndroidViewModel(application) {
@@ -35,39 +37,49 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
       }
    }
 
-   fun onSubmit() {
+   fun onSubmitClick() {
       val state = _uiState.value
-
       if (state.isSubmitting) return
 
-      val userId = state.userId
-      val image = state.capturedImageBase64
-
-      if (userId.isNullOrEmpty()) {
+      if (state.userId.isNullOrEmpty()) {
          _uiState.update { it.copy(errorMessage = "User ID missing.") }
          return
       }
 
-      if (image.isNullOrEmpty()) {
+      if (state.capturedImageBase64.isNullOrEmpty()) {
          _uiState.update { it.copy(errorMessage = "No photo captured.") }
          return
       }
+
+      _uiState.update { it.copy(showStatusDialog = true) }
+   }
+
+   fun onStatusSelected(status: String) {
+      _uiState.update { it.copy(selectedStatus = status) }
+   }
+
+   fun onDismissStatusDialog() {
+      _uiState.update { it.copy(showStatusDialog = false) }
+   }
+
+   fun confirmSubmission() {
+      val state = _uiState.value
+      _uiState.update { it.copy(showStatusDialog = false) }
 
       viewModelScope.launch {
          _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
 
          try {
             val success = SightingRepository.submit(
-               userId = userId,
-               lat = 57.6282764,
-               lon = 11.9030166,
+               userId = state.userId ?: "",
+               lat = 57.6252764,
+               lon = 11.9070166,
                timeStamp = System.currentTimeMillis() / 1000L,
-               image = image,
-               isAlive = "Alive"
+               image = state.capturedImageBase64,
+               isAlive = state.selectedStatus
             )
 
             if (success) {
-               println("Successfully submitted photo")
                _uiState.update {
                   it.copy(
                      capturedImageBase64 = null,
@@ -75,7 +87,6 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                   )
                }
             } else {
-               println("Failed to submit photo")
                _uiState.update {
                   it.copy(errorMessage = "Submission failed or rate-limited. Wait a moment and try again.")
                }
