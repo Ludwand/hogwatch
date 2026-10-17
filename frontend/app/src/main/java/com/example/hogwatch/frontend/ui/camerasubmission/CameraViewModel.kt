@@ -1,8 +1,11 @@
 package com.example.hogwatch.frontend.ui.camerasubmission
 
+import android.Manifest
 import android.app.Application
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hogwatch.frontend.data.repository.LocationRepository
 import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.data.repository.UserManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 data class CameraUiState(
    val date: String = "",
    val time: String = "",
    val userId: String? = null,
    val capturedImageBase64: String? = null, //preview image
+   val latitude: Double? = null,
+   val longitude: Double? = null,
    val isSubmitting: Boolean = false,
    val errorMessage: String? = null,
    val isSubmittedSuccess: Boolean = false,
@@ -26,6 +30,7 @@ data class CameraUiState(
 
 class CameraViewModel(application: Application) : AndroidViewModel(application) {
    private val userManager = UserManager.getInstance(application)
+   private val locationRepo = LocationRepository(application)
 
    private val _uiState = MutableStateFlow(CameraUiState())
    val uiState: StateFlow<CameraUiState> = _uiState.asStateFlow()
@@ -34,6 +39,18 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
       viewModelScope.launch {
          val userId = userManager.getUserId()
          _uiState.update { it.copy(userId = userId) }
+      }
+   }
+
+   @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+   fun fetchUserLocation() {
+      locationRepo.getUserLocation { location ->
+         _uiState.update {
+            it.copy(
+               latitude = location.latitude,
+               longitude = location.longitude
+            )
+         }
       }
    }
 
@@ -48,6 +65,11 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 
       if (state.capturedImageBase64.isNullOrEmpty()) {
          _uiState.update { it.copy(errorMessage = "No photo captured.") }
+         return
+      }
+
+      if (state.latitude == null || state.longitude == null) {
+         _uiState.update { it.copy(errorMessage = "Location not available yet. Please wait or grant location permission.") }
          return
       }
 
@@ -66,14 +88,17 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
       val state = _uiState.value
       _uiState.update { it.copy(showStatusDialog = false) }
 
+      val lat = state.latitude ?: return
+      val lon = state.longitude ?: return
+
       viewModelScope.launch {
          _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
 
          try {
             val success = SightingRepository.submit(
                userId = state.userId ?: "",
-               lat = 57.6252764,
-               lon = 11.9070166,
+               lat = lat,
+               lon = lon,
                timeStamp = System.currentTimeMillis() / 1000L,
                image = state.capturedImageBase64,
                isAlive = state.selectedStatus

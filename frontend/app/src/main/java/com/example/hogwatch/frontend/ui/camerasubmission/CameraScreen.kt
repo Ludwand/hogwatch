@@ -58,6 +58,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -70,6 +71,19 @@ fun CameraScreen(
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
    val context = LocalContext.current
 
+   var hasCameraPermission by remember {
+      mutableStateOf(
+         ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+         ) == PackageManager.PERMISSION_GRANTED
+      )
+   }
+
+   val locationPermission = rememberLocationPermission(
+      requestOnStart = hasCameraPermission, // camera permission > location perm
+      onPermissionGranted = viewModel::fetchUserLocation
+   )
    //success toast
    LaunchedEffect(uiState.isSubmittedSuccess) {
       if (uiState.isSubmittedSuccess) {
@@ -88,14 +102,7 @@ fun CameraScreen(
       }
    }
 
-   var hasCameraPermission by remember {
-      mutableStateOf(
-         ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.CAMERA
-         ) == PackageManager.PERMISSION_GRANTED
-      )
-   }
+
 
    val imageCapture = remember { ImageCapture.Builder().build() }
    val permissionLauncher = rememberLauncherForActivityResult(
@@ -118,7 +125,13 @@ fun CameraScreen(
          }
       },
       onRetakeClick = { viewModel.onRetakePhoto() },
-      onSubmitClick = { viewModel.onSubmitClick() }, // Triggers the dialog popup
+      onSubmitClick = {
+         if (!locationPermission.hasPermission) {
+            locationPermission.requestPermission()
+         } else {
+            viewModel.onSubmitClick()
+         }
+      }, // Triggers the dialog popup
       onStatusSelected = { status -> viewModel.onStatusSelected(status) },
       onConfirmSubmission = { viewModel.confirmSubmission() },
       onDismissDialog = { viewModel.onDismissStatusDialog() }
