@@ -22,17 +22,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.clustering.Clustering
-import com.google.maps.android.clustering.ClusterItem
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.MapsComposeExperimentalApi
-import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.filterNotNull
 import com.example.hogwatch.frontend.data.repository.LocationRepository
 import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.clustering.ClusterItem
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapsComposeExperimentalApi
+import com.google.maps.android.compose.clustering.Clustering
+import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.flow.filterNotNull
 
 // Wrapper used by Google's clustering system.
 data class MapPin(

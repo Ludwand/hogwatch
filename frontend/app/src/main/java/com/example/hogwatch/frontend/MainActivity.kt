@@ -4,19 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.hogwatch.frontend.ui.theme.SrcTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hogwatch.frontend.data.remote.NetworkClient
-import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
-import com.example.hogwatch.frontend.ui.map.MapScreen
 import com.example.hogwatch.frontend.data.repository.UserManager
-import com.example.hogwatch.frontend.ui.sound.SoundScreen
+import com.example.hogwatch.frontend.ui.camerasubmission.CameraScreen
 import com.example.hogwatch.frontend.ui.home.HomeScreen
-import com.example.hogwatch.frontend.ui.rescue.RescueScreen
 import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
+import com.example.hogwatch.frontend.ui.map.MapScreen
+import com.example.hogwatch.frontend.ui.rescue.RescueScreen
+import com.example.hogwatch.frontend.ui.sound.SoundScreen
+import com.example.hogwatch.frontend.ui.theme.SrcTheme
+
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
 
 

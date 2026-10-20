@@ -4,6 +4,7 @@ package com.example.hogwatch.frontend.ui.manualsubmission
 import android.Manifest
 import android.app.Application
 import android.net.Uri
+import android.util.Base64
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
@@ -22,7 +23,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import android.util.Base64
 
 //https://developer.android.com/topic/architecture/ui-layer/stateholders
 data class ManualReportUiState(

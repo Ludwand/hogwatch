@@ -3,7 +3,6 @@ package com.example.hogwatch.frontend.data.repository
 import com.example.hogwatch.frontend.data.remote.NetworkClient
 import com.example.hogwatch.shared.CreateSightingRequest
 import com.example.hogwatch.shared.Sightings
-import java.sql.Types.NULL
 
 object SightingRepository {
    private val sightings = Sightings

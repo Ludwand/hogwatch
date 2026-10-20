@@ -1,18 +1,20 @@
 package com.example.hogwatch.backend
 
 import com.example.hogwatch.shared.CreateSightingRequest
+import com.example.hogwatch.shared.SightingSummary
+import com.example.hogwatch.shared.Sightings
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.*
-import io.ktor.server.http.content.staticResources
+import io.ktor.server.application.Application
+import io.ktor.server.plugins.origin
 import io.ktor.server.request.receive
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.response.respond
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import com.example.hogwatch.shared.SightingSummary
-import com.example.hogwatch.shared.Sightings
-import io.ktor.server.plugins.origin
 import java.util.PriorityQueue
 import kotlin.random.Random
 

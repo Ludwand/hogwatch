@@ -1,17 +1,16 @@
 package com.example.hogwatch.backend
 
 import com.example.hogwatch.shared.SightingSummary
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.Properties
-import kotlin.collections.ArrayList
-import kotlin.system.exitProcess
-import kotlin.random.Random
 import java.util.Base64
-import java.io.File
+import java.util.Properties
+import kotlin.random.Random
+import kotlin.system.exitProcess
 
 
 object Database {
