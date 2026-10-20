@@ -84,6 +84,12 @@ fun CameraScreen(
       requestOnStart = hasCameraPermission, // camera permission > location perm
       onPermissionGranted = viewModel::fetchUserLocation
    )
+
+   LaunchedEffect(locationPermission.hasPermission) {
+      if (locationPermission.hasPermission) {
+         viewModel.fetchUserLocation()
+      }
+   }
    //success toast
    LaunchedEffect(uiState.isSubmittedSuccess) {
       if (uiState.isSubmittedSuccess) {
