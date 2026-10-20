@@ -2,6 +2,7 @@ package com.example.hogwatch.frontend.data.repository
 
 import com.example.hogwatch.frontend.data.remote.NetworkClient
 import com.example.hogwatch.shared.CreateSightingRequest
+import com.example.hogwatch.shared.SightingSummary
 import com.example.hogwatch.shared.Sightings
 
 object SightingRepository {
@@ -23,5 +24,13 @@ object SightingRepository {
          isAlive = isAlive
       )
       return NetworkClient.sendSightingToServer(manualSubmissionSend)
+   }
+
+   suspend fun getUserSightings(userId: String): List<SightingSummary> {
+      return NetworkClient.getUserSightings(userId).submissions
+   }
+
+   suspend fun deleteSighting(id: Int, userId: String): Boolean {
+      return NetworkClient.deleteSighting(id, userId)
    }
 }

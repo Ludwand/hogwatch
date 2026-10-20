@@ -8,6 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -101,7 +102,7 @@ object NetworkClient {
       }
    }
 
-   suspend fun getMapPinInfo(id: Int) : SightingExtraData? {
+   suspend fun getMapPinInfo(id: Int): SightingExtraData? {
       val http = client?.takeIf { it.isActive } ?: return null
 
       return try {
@@ -155,6 +156,49 @@ object NetworkClient {
          Sightings()
       }
 
+   }
+
+   suspend fun getUserSightings(userId: String): Sightings {
+      val http = client?.takeIf { it.isActive } ?: return Sightings()
+
+      return try {
+         val response = http.get {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("sightings", userId)
+            }
+         }
+
+         if (response.status.isSuccess()) {
+            response.body()
+         } else {
+            Sightings()
+         }
+      } catch (e: Exception) {
+         println("Failed to fetch user sightings: ${e.message}")
+         Sightings()
+      }
+   }
+
+   suspend fun deleteSighting(id: Int, userId: String): Boolean {
+      val http = client?.takeIf { it.isActive } ?: return false
+
+      return try {
+         val response = http.delete {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("sightings", "$id", userId)
+            }
+         }
+         response.status.isSuccess()
+      } catch (e: Exception) {
+         println("Failed to delete sighting: ${e.message}")
+         false
+      }
    }
 }
 
