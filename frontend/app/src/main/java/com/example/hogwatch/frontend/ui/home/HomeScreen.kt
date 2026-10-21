@@ -84,7 +84,7 @@ fun HomeScreenContent(
    //bakgrund
    Box(modifier = Modifier.fillMaxSize()) {
       Image(
-         painter = painterResource(id = R.drawable.hog_background), //bild
+         painter = painterResource(id = R.drawable.hog_background2), //bild
          contentDescription = null,
          modifier = Modifier.fillMaxSize(),
          contentScale = ContentScale.Crop, // fyller skärmen

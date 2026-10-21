@@ -3,9 +3,11 @@ package com.example.hogwatch.frontend.ui.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
@@ -18,9 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -39,16 +42,28 @@ fun HomeMenu(
    Row(
       modifier = Modifier
          .fillMaxWidth()
-         .padding(16.dp),
+         .padding(top = 26.dp, end = 0.dp),
       horizontalArrangement = Arrangement.End
    ) {
       Box {
-
-         IconButton(onClick = { isExpanded = true }) {
-            Icon(
-               imageVector = Icons.Default.Menu,
-               contentDescription = "Menu"
-            )
+         IconButton(
+            onClick = { isExpanded = true },
+            modifier = Modifier.size(width = 64.dp, height = 64.dp)
+         ) {
+            Column(
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center
+            ) {
+               Icon(
+                  imageVector = Icons.Default.Menu,
+                  contentDescription = "Menu",
+                  modifier = Modifier.size(30.dp)
+               )
+               Text(
+                  text = "Menu",
+                  fontSize = 12.sp
+               )
+            }
          }
 
          DropdownMenu(
