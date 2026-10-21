@@ -29,7 +29,8 @@ fun HomeMenu(
    onAboutClick: () -> Unit,
    onSoundClick: () -> Unit,
    onMapClick: () -> Unit,
-   onRescueClick: () -> Unit
+   onRescueClick: () -> Unit,
+   onCsvClick: () -> Unit
 ) {
 
    var isExpanded by remember { mutableStateOf(false) }
@@ -79,6 +80,13 @@ fun HomeMenu(
                onClick = {
                   isExpanded = false
                   onRescueClick()
+               }
+            )
+            DropdownMenuItem(
+               text = { Text("CSV Download") },
+               onClick = {
+                  isExpanded = false
+                  onCsvClick()
                }
             )
             DropdownMenuItem(

@@ -218,7 +218,6 @@ object NetworkClient {
 
             if (response?.status?.isSuccess() == true) {
                data = response.body<ByteArray>()
-               //println(String(data, Charsets.UTF_8))TODO: remove after testing
             }
          }
          data
