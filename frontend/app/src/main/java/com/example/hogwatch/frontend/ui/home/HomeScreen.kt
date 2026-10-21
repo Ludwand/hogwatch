@@ -1,10 +1,12 @@
 
 package com.example.hogwatch.frontend.ui.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.hogwatch.frontend.R
@@ -74,13 +77,18 @@ fun HomeScreenContent(
 ) {
    StartupDialog()
 
+   //Kollar om telefonen är horisontell
+   val configuration = LocalConfiguration.current
+   val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
    //bakgrund
    Box(modifier = Modifier.fillMaxSize()) {
       Image(
          painter = painterResource(id = R.drawable.hog_background), //bild
          contentDescription = null,
          modifier = Modifier.fillMaxSize(),
-         contentScale = ContentScale.Crop // fyller skärmen
+         contentScale = ContentScale.Crop, // fyller skärmen
+         alignment = Alignment.TopCenter //Fokus på titel när man vänder
       )
 
       Scaffold(
@@ -100,21 +108,33 @@ fun HomeScreenContent(
             }
 
          }) { innerPadding ->
-         Column(
-            modifier = Modifier
-               .fillMaxSize()
-               .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-         ) {
 
-
-
-            Spacer(modifier = Modifier.height(200.dp))
-
-            CameraButton(onCameraReportClick = onCameraReportClick)
-            Spacer(modifier = Modifier.height((24.dp)))
-            ManualButton(onManualReportClick = onManualReportClick)
+         if (isLandscape) {
+            //horizontell
+            Row(
+               modifier = Modifier
+                  .fillMaxSize()
+                  .padding(innerPadding),
+               horizontalArrangement = Arrangement.SpaceEvenly,
+               verticalAlignment = Alignment.CenterVertically
+            ) {
+               CameraButton(onCameraReportClick = onCameraReportClick)
+               ManualButton(onManualReportClick = onManualReportClick)
+            }
+         } else {
+            //Vertikal
+            Column(
+               modifier = Modifier
+                  .fillMaxSize()
+                  .padding(innerPadding),
+               verticalArrangement = Arrangement.Center,
+               horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+               Spacer(modifier = Modifier.height(200.dp))
+               CameraButton(onCameraReportClick = onCameraReportClick)
+               Spacer(modifier = Modifier.height(24.dp))
+               ManualButton(onManualReportClick = onManualReportClick)
+            }
          }
       }
    }
