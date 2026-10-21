@@ -30,7 +30,8 @@ fun HomeMenu(
    onSoundClick: () -> Unit,
    onMapClick: () -> Unit,
    onRescueClick: () -> Unit,
-   onCsvClick: () -> Unit
+   onCsvClick: () -> Unit,
+   onUserSubClick: () -> Unit
 ) {
 
    var isExpanded by remember { mutableStateOf(false) }
@@ -59,6 +60,13 @@ fun HomeMenu(
                onClick = {
                   isExpanded = false
                   onMapClick()
+               }
+            )
+            DropdownMenuItem(
+               text = { Text("My Submissions") },
+               onClick = {
+                  isExpanded = false
+                  onUserSubClick()
                }
             )
             DropdownMenuItem(

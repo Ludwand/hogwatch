@@ -44,7 +44,8 @@ fun HomeScreen(
    onNavigateToSound: () -> Unit,
    onNavigateToRescue: () -> Unit,
    onNavigateToAbout: () -> Unit,
-   onNavigateToCsv: () -> Unit
+   onNavigateToCsv: () -> Unit,
+   onNavigateToUserSub: () -> Unit
 ) {
    HomeScreenContent(
       onManualReportClick = onNavigateToManualReport,
@@ -54,7 +55,8 @@ fun HomeScreen(
       onAboutClick = onNavigateToAbout,
       onRescueClick = onNavigateToRescue,
       onSoundClick = onNavigateToSound,
-      onCsvClick = onNavigateToCsv
+      onCsvClick = onNavigateToCsv,
+      onUserSubClick = onNavigateToUserSub
    )
 }
 
@@ -67,6 +69,7 @@ fun HomeScreenContent(
    onSoundClick: () -> Unit,
    onRescueClick: () -> Unit,
    onAboutClick: () -> Unit,
+   onUserSubClick: () -> Unit,
    onCsvClick: () -> Unit
 ) {
    StartupDialog()
@@ -92,6 +95,7 @@ fun HomeScreenContent(
                   onRescueClick = onRescueClick,
                   onMapClick = onMapClick,
                   onCsvClick = onCsvClick
+                  ,onUserSubClick = onUserSubClick
                )
             }
 

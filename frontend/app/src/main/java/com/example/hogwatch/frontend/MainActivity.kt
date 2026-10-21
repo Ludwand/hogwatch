@@ -15,6 +15,7 @@ import com.example.hogwatch.frontend.ui.home.HomeScreen
 import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
+import com.example.hogwatch.frontend.ui.viewusersubmissions.ViewUserSubmissions
 import com.example.hogwatch.frontend.ui.rescue.RescueScreen
 import com.example.hogwatch.frontend.ui.sound.SoundScreen
 import com.example.hogwatch.frontend.ui.theme.SrcTheme
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
                      onNavigateToInfo = { navController.navigate("InfoScreen") },
                      onNavigateToSound = { navController.navigate("SoundScreen") },
                      onNavigateToRescue = { navController.navigate("RescueScreen") },
+                     onNavigateToUserSub = { navController.navigate("ViewUserSubmissions") },
                      onNavigateToAbout = { },//TODO: add navigation
                      onNavigateToCsv = { navController.navigate("CsvScreen")}
                   )
@@ -68,6 +70,9 @@ class MainActivity : ComponentActivity() {
                }
                composable("RescueScreen") {
                   RescueScreen(onNavigateBack = { navController.popBackStack() })
+               }
+               composable("ViewUserSubmissions") {
+                  ViewUserSubmissions(onNavigateBack = { navController.popBackStack() })
                }
                composable("CsvScreen") {
                   CsvScreen()
