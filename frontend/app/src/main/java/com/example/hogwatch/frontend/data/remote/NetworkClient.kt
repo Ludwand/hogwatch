@@ -4,14 +4,22 @@ import com.example.hogwatch.shared.CreateSightingRequest
 import com.example.hogwatch.shared.LocalConfig
 import com.example.hogwatch.shared.SightingExtraData
 import com.example.hogwatch.shared.Sightings
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import kotlinx.coroutines.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
+import io.ktor.http.path
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.isActive
+
 import kotlinx.serialization.json.Json
 
 object NetworkClient {
@@ -95,7 +103,7 @@ object NetworkClient {
       }
    }
 
-   suspend fun getMapPinInfo(id: Int) : SightingExtraData? {
+   suspend fun getMapPinInfo(id: Int): SightingExtraData? {
       val http = client?.takeIf { it.isActive } ?: return null
 
       return try {
@@ -150,5 +158,75 @@ object NetworkClient {
       }
 
    }
+
+   suspend fun getUserSightings(userId: String): Sightings {
+      val http = client?.takeIf { it.isActive } ?: return Sightings()
+
+      return try {
+         val response = http.get {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("sightings", userId)
+            }
+         }
+
+         if (response.status.isSuccess()) {
+            response.body()
+         } else {
+            Sightings()
+         }
+      } catch (e: Exception) {
+         println("Failed to fetch user sightings: ${e.message}")
+         Sightings()
+      }
+   }
+
+   suspend fun deleteSighting(id: Int, userId: String): Boolean {
+      val http = client?.takeIf { it.isActive } ?: return false
+
+      return try {
+         val response = http.delete {
+            url {
+               protocol = URLProtocol.HTTP
+               host = LocalConfig.FRONTEND_URL
+               port = LocalConfig.PORT
+               path("sightings", "$id", userId)
+            }
+         }
+         response.status.isSuccess()
+      } catch (e: Exception) {
+         println("Failed to delete sighting: ${e.message}")
+         false
+      }
+   }
+
+   suspend fun getCsv(): ByteArray? {
+      return try {
+         var data: ByteArray? = null
+
+         if (client?.isActive == true) {
+            val response = client?.get {
+               url {
+                  protocol = URLProtocol.HTTP
+                  host = LocalConfig.FRONTEND_URL
+                  port = LocalConfig.PORT
+                  path("/csv")
+               }
+            }
+
+            if (response?.status?.isSuccess() == true) {
+               data = response.body<ByteArray>()
+               //println(String(data, Charsets.UTF_8))TODO: remove after testing
+            }
+         }
+         data
+      } catch (e: Exception) {
+         println("Exception: ${e.message}")
+         null
+      }
+   }
+
 }
 

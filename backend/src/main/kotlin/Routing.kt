@@ -1,18 +1,22 @@
 package com.example.hogwatch.backend
 
 import com.example.hogwatch.shared.CreateSightingRequest
+import com.example.hogwatch.shared.SightingSummary
+import com.example.hogwatch.shared.Sightings
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.*
-import io.ktor.server.http.content.staticResources
+import io.ktor.server.application.Application
+import io.ktor.server.plugins.origin
 import io.ktor.server.request.receive
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondOutputStream
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import com.example.hogwatch.shared.SightingSummary
-import com.example.hogwatch.shared.Sightings
-import io.ktor.server.plugins.origin
 import java.util.PriorityQueue
 import kotlin.random.Random
 
@@ -111,6 +115,17 @@ fun Application.configureRouting() {
             val id = call.parameters["id"]?.toInt() ?: return@get call.respond(HttpStatusCode.BadRequest)
             val image = Database.getSightingImage(id) ?: return@get call.respond(HttpStatusCode.NotFound)
             call.respond(HttpStatusCode.OK, image)
+         } catch (e: Exception) {
+            println("Exception ${e.message}")
+            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
+         }
+      }
+
+      get("/csv") {
+         try {
+            call.respondOutputStream(ContentType.Text.CSV) { //https://api.ktor.io/ktor-server-core/io.ktor.server.response/respond-output-stream.html
+               Database.getCsv(this)
+            }
          } catch (e: Exception) {
             println("Exception ${e.message}")
             call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")

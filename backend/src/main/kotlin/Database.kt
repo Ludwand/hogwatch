@@ -1,17 +1,19 @@
 package com.example.hogwatch.backend
 
 import com.example.hogwatch.shared.SightingSummary
+import java.io.File
+import org.postgresql.copy.CopyManager
+import org.postgresql.core.BaseConnection
+import java.io.OutputStream
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.Properties
-import kotlin.collections.ArrayList
-import kotlin.system.exitProcess
-import kotlin.random.Random
 import java.util.Base64
-import java.io.File
+import java.util.Properties
+import kotlin.random.Random
+import kotlin.system.exitProcess
 
 
 object Database {
@@ -203,5 +205,16 @@ object Database {
          println(e)
       }
       return false
+   }
+
+   //https://stackoverflow.com/questions/53887266/copy-data-from-postgres-db-to-aws-s3-in-one-step
+   fun getCsv(stream: OutputStream) {
+      try {
+         val sql = "COPY (SELECT id, userid, lat, long, to_timestamp(time) AS sighting_time, isAlive FROM Sightings) TO STDOUT WITH (FORMAT CSV, HEADER);"
+         val copyManager = CopyManager(conn as BaseConnection?)
+         copyManager.copyOut(sql, stream)
+      } catch (e: SQLException) {
+         println(e)
+      }
    }
 }
