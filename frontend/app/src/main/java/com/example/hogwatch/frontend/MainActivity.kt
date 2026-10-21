@@ -15,10 +15,10 @@ import com.example.hogwatch.frontend.ui.home.HomeScreen
 import com.example.hogwatch.frontend.ui.info.InfoScreen
 import com.example.hogwatch.frontend.ui.manualsubmission.ManualSubmitScreen
 import com.example.hogwatch.frontend.ui.map.MapScreen
-import com.example.hogwatch.frontend.ui.viewusersubmissions.ViewUserSubmissions
 import com.example.hogwatch.frontend.ui.rescue.RescueScreen
 import com.example.hogwatch.frontend.ui.sound.SoundScreen
 import com.example.hogwatch.frontend.ui.theme.SrcTheme
+import com.example.hogwatch.frontend.ui.viewusersubmissions.ViewUserSubmissionsScreen
 
 //import com.example.hogwatch.frontend.ui.manualsubmission.ManualScreen
 
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                   RescueScreen(onNavigateBack = { navController.popBackStack() })
                }
                composable("ViewUserSubmissions") {
-                  ViewUserSubmissions(onNavigateBack = { navController.popBackStack() })
+                  ViewUserSubmissionsScreen()
                }
                composable("CsvScreen") {
                   CsvScreen()
