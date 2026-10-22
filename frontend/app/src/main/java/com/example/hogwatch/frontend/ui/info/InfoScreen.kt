@@ -58,7 +58,7 @@ fun InfoScreen(
          horizontalAlignment = Alignment.CenterHorizontally
       ) {
          Image(
-            painter = painterResource(id = R.drawable.hedgehog_pic), // Replace with your image filename
+            painter = painterResource(id = R.drawable.hedgehog_pic),
             contentDescription = "Picture of Hedgehog",
             modifier = Modifier
                .fillMaxWidth()
@@ -82,7 +82,8 @@ fun InfoScreen(
          )
          Spacer(modifier = Modifier.height(4.dp))
          Text(
-            text = "Size: 20-30cm. \n\n Weight: 450-1500g.\n\n Lifespan: 2-5 years. Up to 10 in captivity.",
+            text = "Size: 20-30cm.\n\nWeight: 450-1500g.\n\nLifespan: 2-5 years. Up to 10 in captivity.",
+            modifier = Modifier.fillMaxWidth(),
             fontStyle = FontStyle.Normal,
             fontSize = 16.sp
          )
