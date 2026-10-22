@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -22,8 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hogwatch.frontend.R
 
 
 @Composable
@@ -42,12 +43,93 @@ fun HomeMenu(
    Row(
       modifier = Modifier
          .fillMaxWidth()
-         .padding(top = 26.dp, end = 0.dp),
+         .padding(top = 12.dp, end = 0.dp),
       horizontalArrangement = Arrangement.End
    ) {
-      Box {
+      Column(
+         horizontalAlignment = Alignment.CenterHorizontally,
+         verticalArrangement = Arrangement.spacedBy(4.dp)
+      ) {
+         Box {
+            IconButton(
+               onClick = { isExpanded = true },
+               modifier = Modifier.size(width = 64.dp, height = 64.dp)
+            ) {
+               Column(
+                  horizontalAlignment = Alignment.CenterHorizontally,
+                  verticalArrangement = Arrangement.Center
+               ) {
+                  Icon(
+                     painter = painterResource(id = R.drawable.menu_icon_brown2),
+                     contentDescription = "Menu",
+                     modifier = Modifier.size(30.dp),
+                     tint = Color.Unspecified
+                  )
+                  Text(
+                     text = "Menu",
+                     fontSize = 12.sp,
+                     color = Color(0xFF8B4513)
+                  )
+               }
+            }
+
+            DropdownMenu(
+               expanded = isExpanded,
+               onDismissRequest = { isExpanded = false }
+            ) {/* Map menu i dropdown - unused
+               DropdownMenuItem(
+                  text = { Text("Map") },
+                  onClick = {
+                     isExpanded = false
+                     onMapClick()
+                  }
+               )*/
+               DropdownMenuItem(
+                  text = { Text("My Submissions") },
+                  onClick = {
+                     isExpanded = false
+                     onUserSubClick()
+                  }
+               )
+               DropdownMenuItem(
+                  text = { Text("Info Hedgehogs") },
+                  onClick = {
+                     isExpanded = false
+                     onInfoClick()
+                  }
+               )
+               DropdownMenuItem(
+                  text = { Text("Hedgehog Sounds") },
+                  onClick = {
+                     isExpanded = false
+                     onSoundClick()
+                  }
+               )
+               DropdownMenuItem(
+                  text = { Text("Rescue Guide") },
+                  onClick = {
+                     isExpanded = false
+                     onRescueClick()
+                  }
+               )
+               DropdownMenuItem(
+                  text = { Text("CSV Download") },
+                  onClick = {
+                     isExpanded = false
+                     onCsvClick()
+                  }
+               )/* Unused about page
+               DropdownMenuItem(
+                  text = { Text("About HogWatch") },
+                  onClick = {
+                     isExpanded = false
+                     onAboutClick()
+                  }
+               )*/
+            }
+         }
          IconButton(
-            onClick = { isExpanded = true },
+            onClick = onMapClick,
             modifier = Modifier.size(width = 64.dp, height = 64.dp)
          ) {
             Column(
@@ -55,70 +137,17 @@ fun HomeMenu(
                verticalArrangement = Arrangement.Center
             ) {
                Icon(
-                  imageVector = Icons.Default.Menu,
-                  contentDescription = "Menu",
-                  modifier = Modifier.size(30.dp)
+                  painter = painterResource(id = R.drawable.map_icon),
+                  contentDescription = "Map",
+                  modifier = Modifier.size(30.dp),
+                  tint = Color.Unspecified
                )
                Text(
-                  text = "Menu",
-                  fontSize = 12.sp
+                  text = "Map",
+                  fontSize = 12.sp,
+                  color = Color(0xFF8B4513)
                )
             }
-         }
-
-         DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
-         ) {
-            DropdownMenuItem(
-               text = { Text("Map") },
-               onClick = {
-                  isExpanded = false
-                  onMapClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("My Submissions") },
-               onClick = {
-                  isExpanded = false
-                  onUserSubClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("Info Hedgehogs") },
-               onClick = {
-                  isExpanded = false
-                  onInfoClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("Hedgehog Sounds") },
-               onClick = {
-                  isExpanded = false
-                  onSoundClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("Rescue Guide") },
-               onClick = {
-                  isExpanded = false
-                  onRescueClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("CSV Download") },
-               onClick = {
-                  isExpanded = false
-                  onCsvClick()
-               }
-            )
-            DropdownMenuItem(
-               text = { Text("About HogWatch") },
-               onClick = {
-                  isExpanded = false
-                  onAboutClick()
-               }
-            )
          }
       }
    }
