@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.IconButton
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -126,14 +128,20 @@ fun HomeScreenContent(
             Column(
                modifier = Modifier
                   .fillMaxSize()
-                  .padding(innerPadding),
-               verticalArrangement = Arrangement.Center,
+                  .padding(innerPadding)
+                  .verticalScroll(rememberScrollState()),
                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               Spacer(modifier = Modifier.height(200.dp))
+               Spacer(modifier = Modifier.weight(6.5f))
+
                CameraButton(onCameraReportClick = onCameraReportClick)
+
                Spacer(modifier = Modifier.height(24.dp))
+
                ManualButton(onManualReportClick = onManualReportClick)
+
+
+               Spacer(modifier = Modifier.weight(1f))
             }
          }
       }

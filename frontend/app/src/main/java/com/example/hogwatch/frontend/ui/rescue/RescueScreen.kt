@@ -58,7 +58,7 @@ fun RescueScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.hedgehog_pic), // Replace with your image filename
+                painter = painterResource(id = R.drawable.injured_hog), // Replace with your image filename
                 contentDescription = "Placeholder injured",
                 modifier = Modifier
                     .fillMaxWidth()
