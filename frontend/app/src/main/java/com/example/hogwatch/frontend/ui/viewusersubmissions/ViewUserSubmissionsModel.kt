@@ -1,23 +1,32 @@
 package com.example.hogwatch.frontend.ui.viewusersubmissions
 
 import android.app.Application
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hogwatch.frontend.data.repository.SightingRepository
 import com.example.hogwatch.frontend.data.repository.UserManager
 import com.example.hogwatch.shared.SightingSummary
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class UserSubmissionsUiState(
     val userId: String? = null,
     val submissions: List<SightingSummary> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val successMessage: String? = null
+    val successMessage: String? = null,
+    val selectedSighting: SightingSummary? = null,
+    val selectedSightingImage: ImageBitmap? = null,
+    val isImageLoading: Boolean = false
 )
 
 class ViewUserSubmissionsModel(application: Application) : AndroidViewModel(application) {
@@ -63,6 +72,48 @@ class ViewUserSubmissionsModel(application: Application) : AndroidViewModel(appl
                     )
                 }
             }
+        }
+    }
+
+    fun selectSighting(sighting: SightingSummary) {
+        _uiState.update {
+            it.copy(
+                selectedSighting = sighting,
+                selectedSightingImage = null,
+                isImageLoading = sighting.hasImage
+            )
+        }
+
+        if (sighting.hasImage) {
+            viewModelScope.launch {
+                val base64Image = SightingRepository.getSightingImage(sighting.id)
+
+                val bitmap = withContext(Dispatchers.Default) {
+                    base64Image?.let { encoded ->
+                        val bytes = Base64.decode(encoded, Base64.DEFAULT)
+                        BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+                    }
+                }
+
+                if (_uiState.value.selectedSighting?.id == sighting.id) {
+                    _uiState.update {
+                        it.copy(
+                            selectedSightingImage = bitmap,
+                            isImageLoading = false
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun closeDetailPopup() {
+        _uiState.update {
+            it.copy(
+                selectedSighting = null,
+                selectedSightingImage = null,
+                isImageLoading = false
+            )
         }
     }
 

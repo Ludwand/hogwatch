@@ -34,4 +34,8 @@ object SightingRepository {
    suspend fun deleteSighting(id: Int, userId: String): Boolean {
       return NetworkClient.deleteSighting(id, userId)
    }
+
+   suspend fun getSightingImage(id: Int): String? {
+      return NetworkClient.getMapPinInfo(id)?.image
+   }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,11 +33,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hogwatch.shared.SightingSummary
+import androidx.compose.foundation.Image
 
 @Composable
 fun ViewUserSubmissionsScreen(
@@ -82,11 +85,57 @@ fun ViewUserSubmissionsScreen(
                 ) { sighting ->
                     SightingCard(
                         sighting = sighting,
-                        onClick = { onSightingClick(sighting.id) },
+                        onClick = {
+                            viewModel.selectSighting(sighting)
+                            onSightingClick(sighting.id)
+                        },
                         onDeleteClick = { itemToDelete = sighting }
                     )
                 }
             }
+        }
+
+        // pop-up on click
+        uiState.selectedSighting?.let { sighting ->
+            AlertDialog(
+                onDismissRequest = { viewModel.closeDetailPopup() },
+                title = { Text("Sighting #${sighting.id}") },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if (uiState.isImageLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(180.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        } else {
+                            uiState.selectedSightingImage?.let { bitmap ->
+                                Image(
+                                    bitmap = bitmap,
+                                    contentDescription = "Sighting image",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(180.dp),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "Latitude: ${sighting.lat}\nLongitude: ${sighting.lon}", //Probably time & date here instead of coords which is useless to end user
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { viewModel.closeDetailPopup() }) {
+                        Text("Close")
+                    }
+                }
+            )
         }
 
         // Confirm delete
