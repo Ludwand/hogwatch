@@ -26,12 +26,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.hogwatch.frontend.ui.location.rememberLocationPermission
+import com.google.android.gms.maps.model.LatLng
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
-
 
 @Composable
 fun ManualSubmitScreen(
@@ -41,6 +41,10 @@ fun ManualSubmitScreen(
 ) {
    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+   var showLocationPicker by remember {
+      mutableStateOf(false)
+   }
+
    LaunchedEffect(uiState.isSubmittedSuccess) {
       if (uiState.isSubmittedSuccess) {
          onNavigateBack()
@@ -48,7 +52,32 @@ fun ManualSubmitScreen(
       }
    }
 
-   //https://developer.android.com/training/data-storage/shared/photo-picker
+   // Show the location picker as a fullscreen screen.
+   if (showLocationPicker) {
+      val latitude = uiState.latitudeString.toDoubleOrNull()
+      val longitude = uiState.longitudeString.toDoubleOrNull()
+
+      val initialLocation =
+         if (latitude != null && longitude != null) {
+            LatLng(latitude, longitude)
+         } else {
+            null
+         }
+
+      ManualLocationPickerScreen(
+         initialLocation = initialLocation,
+         onLocationSelected = { position ->
+            viewModel.onLocationSelected(position)
+            showLocationPicker = false
+         },
+         onNavigateBack = {
+            showLocationPicker = false
+         }
+      )
+
+      return
+   }
+
    val pickMedia = rememberLauncherForActivityResult(
       contract = ActivityResultContracts.PickVisualMedia()
    ) { uri: Uri? ->
@@ -57,6 +86,7 @@ fun ManualSubmitScreen(
       }
    }
 
+   // Kept from the existing implementation.
    val permission = rememberLocationPermission(
       onPermissionGranted = viewModel::fetchUserLocation
    )
@@ -68,12 +98,16 @@ fun ManualSubmitScreen(
       onDateChange = viewModel::onDateChange,
       onTimeChange = viewModel::onTimeChange,
       onFetchLocation = permission.requestPermission,
+      onOpenLocationPicker = {
+         showLocationPicker = true
+      },
       onSubmit = viewModel::onSubmit,
       onRadioButton = viewModel::onRadioButton,
       onAddPhotoClick = {
          pickMedia.launch(
-            PickVisualMediaRequest
-               (ActivityResultContracts.PickVisualMedia.ImageOnly)
+            PickVisualMediaRequest(
+               ActivityResultContracts.PickVisualMedia.ImageOnly
+            )
          )
       },
       onRemovePhoto = viewModel::onRemovePhoto
@@ -89,29 +123,41 @@ fun ManualSubmitContent(
    onDateChange: (String) -> Unit,
    onTimeChange: (String) -> Unit,
    onFetchLocation: () -> Unit,
+   onOpenLocationPicker: () -> Unit,
    onSubmit: () -> Unit,
    modifier: Modifier = Modifier,
    onRadioButton: (String) -> Unit,
    onAddPhotoClick: () -> Unit,
    onRemovePhoto: () -> Unit
 ) {
-   var showDatePicker by remember { mutableStateOf(false) }
+   var showDatePicker by remember {
+      mutableStateOf(false)
+   }
+
    val datePickerState = rememberDatePickerState(
       yearRange = NoFutureDates.yearRange,
       selectableDates = NoFutureDates
    )
 
-   var showTimePicker by remember { mutableStateOf(false) }
-   val timePickerState = rememberTimePickerState(is24Hour = true)
+   var showTimePicker by remember {
+      mutableStateOf(false)
+   }
+
+   val timePickerState =
+      rememberTimePickerState(is24Hour = true)
 
    Scaffold(
       topBar = {
          TopAppBar(
-            title = { Text("Submit a hedgehog Sighting") }
+            title = {
+               Text("Submit a hedgehog Sighting")
+            }
          )
       }
    ) { innerPadding ->
+
       val scrollState = rememberScrollState()
+
       Column(
          modifier = modifier
             .fillMaxSize()
@@ -119,129 +165,144 @@ fun ManualSubmitContent(
             .verticalScroll(scrollState)
             .padding(16.dp),
 
-         verticalArrangement = Arrangement.spacedBy(12.dp)
+         verticalArrangement =
+            Arrangement.spacedBy(12.dp)
       ) {
 
-         //Date
-         //https://stackoverflow.com/questions/67111020/exposed-drop-down-menu-for-jetpack-compose
+         // Date
          ExposedDropdownMenuBox(
             expanded = false,
-            onExpandedChange = { showDatePicker = true }
+            onExpandedChange = {
+               showDatePicker = true
+            }
          ) {
             OutlinedTextField(
                value = uiState.date,
                onValueChange = {},
                readOnly = true,
-               label = { Text("Date") },
+               label = {
+                  Text("Date")
+               },
                trailingIcon = {
-
                   Icon(
                      imageVector = Icons.Default.DateRange,
                      contentDescription = "Select date"
                   )
                },
                modifier = Modifier
-                  .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                  .menuAnchor(
+                     ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                  )
                   .fillMaxWidth()
             )
          }
 
-         //Time
+         // Time
          ExposedDropdownMenuBox(
             expanded = false,
-            onExpandedChange = { showTimePicker = true }
+            onExpandedChange = {
+               showTimePicker = true
+            }
          ) {
             OutlinedTextField(
                value = uiState.time,
                onValueChange = {},
                readOnly = true,
-               label = { Text("Time") },
+               label = {
+                  Text("Time")
+               },
                trailingIcon = {
-
                   Icon(
                      imageVector = Icons.Default.AccessTime,
                      contentDescription = "Select time"
                   )
                },
                modifier = Modifier
-                  .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                  .menuAnchor(
+                     ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                  )
                   .fillMaxWidth()
             )
          }
 
-
-         // Latitud
-         OutlinedTextField(
-            value = uiState.latitudeString,
-            onValueChange = onLatitudeChange,
-            label = { Text("Latitude") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-         )
-
-         // Longitud
-         OutlinedTextField(
-            value = uiState.longitudeString,
-            onValueChange = onLongitudeChange,
-            label = { Text("Longitude") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-         )
-
          Button(
-            onClick = onFetchLocation
+            onClick = onOpenLocationPicker
          ) {
-            Text("Use my location")
+            Text("Select location on map")
          }
 
-         //https://www.youtube.com/watch?v=XEdC0s9e3NA
+         if (
+            uiState.latitudeString.isNotBlank() &&
+            uiState.longitudeString.isNotBlank()
+         ) {
+            Text(
+               text = "Location selected ✓"
+            )
+         }
+
+         // Photo
          if (uiState.photo != null) {
             SelectedPhotoPreview(
                photo = uiState.photo!!,
                onRemovePhoto = onRemovePhoto
             )
          } else {
-            Button(onClick = onAddPhotoClick) {
+            Button(
+               onClick = onAddPhotoClick
+            ) {
                Text("Add photo")
             }
          }
 
-         //https://developer.android.com/develop/ui/compose/components/radio-button
-         Column(modifier.selectableGroup()) {
+         // Hedgehog status
+         Column(
+            modifier.selectableGroup()
+         ) {
             uiState.radioOptions.forEach { text ->
                Row(
                   Modifier
                      .fillMaxWidth()
                      .height(56.dp)
                      .selectable(
-                        selected = (text == uiState.isAlive),
-                        onClick = { onRadioButton(text)},
+                        selected =
+                           text == uiState.isAlive,
+                        onClick = {
+                           onRadioButton(text)
+                        },
                         role = Role.RadioButton
                      )
                      .padding(horizontal = 16.dp),
-                  verticalAlignment = Alignment.CenterVertically
+                  verticalAlignment =
+                     Alignment.CenterVertically
                ) {
                   RadioButton(
-                     selected = (text == uiState.isAlive),
-                     onClick = null // null recommended for accessibility with screen readers
+                     selected =
+                        text == uiState.isAlive,
+                     onClick = null
                   )
+
                   Text(
                      text = text,
-                     style = MaterialTheme.typography.bodyLarge,
-                     modifier = Modifier.padding(start = 16.dp)
+                     style =
+                        MaterialTheme.typography.bodyLarge,
+                     modifier =
+                        Modifier.padding(start = 16.dp)
                   )
                }
             }
          }
+
          if (uiState.errorMessage != null) {
             Text(
                text = uiState.errorMessage,
                color = MaterialTheme.colorScheme.error
             )
          }
-         Spacer(modifier = Modifier.weight(1f))
 
-         // Submit
+         Spacer(
+            modifier = Modifier.weight(1f)
+         )
+
          Button(
             onClick = onSubmit,
             enabled = !uiState.isSubmitting,
@@ -249,7 +310,7 @@ fun ManualSubmitContent(
          ) {
             if (uiState.isSubmitting) {
                CircularProgressIndicator(
-                  modifier = Modifier.size(24.dp),
+                  modifier = Modifier.size(24.dp)
                )
             } else {
                Text("Submit Sighting")
@@ -258,17 +319,26 @@ fun ManualSubmitContent(
       }
    }
 
-   //https://stackoverflow.com/questions/77676317/how-to-disable-future-dates-in-android-compose-material3-datepicker
    if (showDatePicker) {
       DatePickerDialog(
-         onDismissRequest = { showDatePicker = false },
+         onDismissRequest = {
+            showDatePicker = false
+         },
          confirmButton = {
             TextButton(
                onClick = {
                   showDatePicker = false
+
                   datePickerState.selectedDateMillis?.let { millis ->
-                     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                     val formattedDate = formatter.format(Date(millis))
+                     val formatter =
+                        SimpleDateFormat(
+                           "yyyy-MM-dd",
+                           Locale.getDefault()
+                        )
+
+                     val formattedDate =
+                        formatter.format(Date(millis))
+
                      onDateChange(formattedDate)
                   }
                }
@@ -278,29 +348,38 @@ fun ManualSubmitContent(
          },
          dismissButton = {
             TextButton(
-               onClick = { showDatePicker = false }
+               onClick = {
+                  showDatePicker = false
+               }
             ) {
                Text("Cancel")
             }
          }
       ) {
-         DatePicker(state = datePickerState)
+         DatePicker(
+            state = datePickerState
+         )
       }
    }
 
    if (showTimePicker) {
       TimePickerDialog(
-         onDismissRequest = { showTimePicker = false },
+         onDismissRequest = {
+            showTimePicker = false
+         },
          confirmButton = {
             TextButton(
                onClick = {
                   showTimePicker = false
-                  val formattedTime = String.format(
-                     Locale.getDefault(),
-                     "%02d:%02d",
-                     timePickerState.hour,
-                     timePickerState.minute
-                  )
+
+                  val formattedTime =
+                     String.format(
+                        Locale.getDefault(),
+                        "%02d:%02d",
+                        timePickerState.hour,
+                        timePickerState.minute
+                     )
+
                   onTimeChange(formattedTime)
                }
             ) {
@@ -308,17 +387,22 @@ fun ManualSubmitContent(
             }
          },
          dismissButton = {
-            TextButton(onClick = { showTimePicker = false }) {
+            TextButton(
+               onClick = {
+                  showTimePicker = false
+               }
+            ) {
                Text("Cancel")
             }
          }
       ) {
-         TimePicker(state = timePickerState)
+         TimePicker(
+            state = timePickerState
+         )
       }
    }
 }
 
-//https://developer.android.com/develop/ui/compose/components/time-pickers
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(
@@ -331,24 +415,35 @@ fun TimePickerDialog(
       onDismissRequest = onDismissRequest,
       confirmButton = confirmButton,
       dismissButton = dismissButton,
-      text = { content() }
+      text = {
+         content()
+      }
    )
 }
 
-// Source - https://stackoverflow.com/a/79754991
-// Posted by BennyG
-// Retrieved 2026-10-14, License - CC BY-SA 4.0
-//Modified to fit our application
 @OptIn(ExperimentalMaterial3Api::class)
 object NoFutureDates : SelectableDates {
-   private val today = LocalDate.now()
-   private val todayMillis = today.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-   val yearRange = IntRange(1900, today.year)
+   private val today =
+      LocalDate.now()
 
-   override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis <= todayMillis
-   override fun isSelectableYear(year: Int) = year in yearRange
+   private val todayMillis =
+      today
+         .atStartOfDay()
+         .toInstant(ZoneOffset.UTC)
+         .toEpochMilli()
+
+   val yearRange =
+      IntRange(1900, today.year)
+
+   override fun isSelectableDate(
+      utcTimeMillis: Long
+   ) = utcTimeMillis <= todayMillis
+
+   override fun isSelectableYear(
+      year: Int
+   ) = year in yearRange
 }
-//https://www.youtube.com/watch?v=XEdC0s9e3NA
+
 @Composable
 fun SelectedPhotoPreview(
    photo: Uri,
@@ -356,19 +451,18 @@ fun SelectedPhotoPreview(
    modifier: Modifier = Modifier
 ) {
    Box(
-      modifier = modifier
-         .size(110.dp)
+      modifier = modifier.size(110.dp)
    ) {
       AsyncImage(
          model = photo,
          contentDescription = "Selected photo",
          modifier = Modifier
             .clip(RoundedCornerShape(8.dp)),
-         contentScale = ContentScale.Crop // Make a square
+         contentScale = ContentScale.Crop
       )
 
       IconButton(
-         onClick = onRemovePhoto,
+         onClick = onRemovePhoto
       ) {
          Icon(
             imageVector = Icons.Default.Close,
