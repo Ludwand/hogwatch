@@ -1,0 +1,121 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>220</x><y>10</y><w>230</w><h>150</h></coordinates><panel_attributes>Main
+--
+- port: Int
+- host: String
+--
++ main(args: Array&lt;String&gt;): void
+--
+Responsibilities
+-- Start Netty server
+-- Specifies rootModule properties
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>290</x><y>350</y><w>400</w><h>260</h></coordinates><panel_attributes>Routing
+--
++ configureRouting(): void
+- get_map_info(): mapInfo
+- /pins/(minLat, maxLat, minLong, maxLong): Sightings
+- sightings(userId): Sightings
+- sighting(id). Sighting
+- sighting/{id}/image(id): image
+- csv(): Text.Csv
+- submission: HTTPStatusCode
+- delete sightings(id, userId): HTTPStatusCode
+--
+Responsibilities
+-- Receives a post for submission
+-- Deserializes and serializes JSON to shared data classes
+-- Forwards data to the database 
+-- Send requested data to the client
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>920</x><y>560</y><w>410</w><h>270</h></coordinates><panel_attributes>Database
+--
+-conn: Connection
+--
++ seedTestSightings()
++ insertSighting(userid: Int, lat: Float, 
+	long: Float, time: Long, image:string,
+	isAlive: String): Int
++ getSightings(id: Int): Sighting
++ getSightingSummary(id: Int): SightingSummary
++ getSightingImage(id: Int): String
++ getSightingSummaries(userid: String): ArrayList&lt;SightingSummary&gt;
++ getSightingSummaries(minLat: Double, maxLat: Double, 
+minLong: Double, maxLong: Double): ArrayList&lt;SightingSummary&gt;
++ deleteSighting(id: Int, userid: String): Boolean
++ getCsv(stream: OutputStream)
+--
+Responsibilities
+- Insert, get and delete data to the database</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>830</y><w>400</w><h>190</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
+CreateSightingRequest
+--
++ id: String
++ lat: String
++ lon: String
++ timeStamp: Long
++ image: String
++ isAlive: String
+--
+Responsibilities
+-- Data class that represent the data from a sighting that is going
+to be sent over the network.
+-- Serializes and deserializes with JSON</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>540</x><y>0</y><w>210</w><h>150</h></coordinates><panel_attributes>LocalConfigKt
+--
++ BACKEND_URL: String
++ FRONTEND_URL: String
++ PORT: Int
+--
+Responsibilities
+-- Enables the developer to specify 
+	their own url properties</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1590</x><y>640</y><w>210</w><h>160</h></coordinates><panel_attributes>&lt;&lt;data class&gt;&gt;
+Sighting
+--
++ id: Int
++ userid: Int
++ lat: Float
++ lon: Float
++ timeStamp: Long
++ image: String
++ isAlive: String
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>970</x><y>390</y><w>280</w><h>120</h></coordinates><panel_attributes>&lt;&lt;Object&gt;&gt;
+LatestSubmission
+--
+- data: HashMap&lt;String, Long&gt;
+--
++ canSubmit(addr: String): Boolean
+--
+Responsibilities
+-- Prevents the server from being spammed</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>600</y><w>190</w><h>250</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;230;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>440</y><w>310</w><h>50</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>290;10;10;30</additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>580</y><w>260</w><h>90</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>240;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1320</x><y>670</y><w>290</w><h>60</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>270;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>310</x><y>150</y><w>180</w><h>220</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>160;200;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>70</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>770</x><y>890</y><w>210</w><h>160</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+SightingSummary
+--
++ id: Int
++ lat: Double
++ lon: Double
++ hasImage: Boolean
+--
+Responsibilities
+-- Holds the variables that the 
+	map retrieves
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>600</y><w>250</w><h>310</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>230;290;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>900</y><w>270</w><h>110</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+Sightings
+--
++ submissions: ArrayList&lt;SightingSummary&gt;
+--
+Responsibilities
+-- Holds multiple sightings</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>930</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>600</y><w>180</w><h>320</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>160;300;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>120</y><w>210</w><h>150</h></coordinates><panel_attributes>LatestSubmission
+--
+- counts: HashMap&lt;String, Int&gt;
+- times: PriorityQueue&lt;QueueEntry&gt;
+--
++ canSubmit(String): Boolean
+--
+Responsibilities
+-- Detects too frequent submissions 
+	from a specific user</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1160</x><y>110</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+QueueEntry
+--
+- time: Long
+- addr: String
+--
++ compareTo(QueueEntry): Int
+--
+Responsibilities
+-- Holds the timestamp and 
+the address of a client submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>650</x><y>200</y><w>210</w><h>170</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>190;10;10;150</additional_attributes></element><element><id>Relation</id><coordinates><x>1040</x><y>190</y><w>140</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;120;10</additional_attributes></element><element><id>Relation</id><coordinates><x>950</x><y>820</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element></diagram>
