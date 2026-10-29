@@ -1,4 +1,16 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>280</x><y>600</y><w>290</w><h>300</h></coordinates><panel_attributes>CameraScreenKt
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <help_text>Space for diagram notes</help_text>
+  <zoom_level>4</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>232</x>
+      <y>256</y>
+      <w>116</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>CameraScreenKt
 --
 - uiState: CameraUiState
 - context: Context
@@ -17,7 +29,18 @@
 --
 Responsibilities
 -- Show a camerscreen and enables the user to 
-in the future sen ad foto to the server.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>390</y><w>300</w><h>140</h></coordinates><panel_attributes>MainActivityKt
+in the future sen ad foto to the server.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>172</y>
+      <w>120</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>MainActivityKt
 --
 + onCreate(savedInstanceState: Bundle?)
 + onDestroy()
@@ -25,7 +48,18 @@ in the future sen ad foto to the server.</panel_attributes><additional_attribute
 Responsibilities
 -- Handles the android lifecycle events
 -- Directs to the different pages linked from the 
-	homepage</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>690</x><y>720</y><w>270</w><h>140</h></coordinates><panel_attributes>ManualScreenKt
+	homepage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>396</x>
+      <y>304</y>
+      <w>108</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ManualScreenKt
 --
 - statusText: String
 -  showDatePicker: Boolean
@@ -34,7 +68,18 @@ Responsibilities
 + ManualScreen(navController: NavController) 
 --
 Responsibilities
--- Renders the manual sbmit screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1140</x><y>520</y><w>240</w><h>130</h></coordinates><panel_attributes>MapScreenKt
+-- Renders the manual sbmit screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>576</x>
+      <y>224</y>
+      <w>96</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>MapScreenKt
 --
 - coroutineScope: CoroutineScope
 - data: List&lt;MapInfo&gt;
@@ -42,7 +87,18 @@ Responsibilities
 + MapScreen()
 --
 Responsibilities
--- Shows the sightings on a map</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>350</y><w>260</w><h>190</h></coordinates><panel_attributes>UserManager
+-- Shows the sightings on a map</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>244</x>
+      <y>156</y>
+      <w>104</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>UserManager
 --
 -dataStore: Context
 - USER_ID_KEY:  Preferences.Key&lt;String&gt;
@@ -54,7 +110,18 @@ Responsibilities
 --
 Responsibilities
 -- Retrieves a unique user Id for each client
--- Managing one instance if UserManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>1140</y><w>270</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Object&gt;&gt;
+-- Managing one instance if UserManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>472</y>
+      <w>108</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Object&gt;&gt;
 NetworkClient
 --
 -client: HttpClient
@@ -65,7 +132,18 @@ NetworkClient
 + getMapInfo(): List&lt;MapInfo&gt;
 --
 Responsibilities
--- Send HTTP post and get to the http-server</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>920</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+-- Send HTTP post and get to the http-server</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>384</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data Class&gt;&gt;
 CreateSightingRequest
 --
 -id: String
@@ -76,13 +154,57 @@ CreateSightingRequest
 --
 Responsibilities
 -- Used to store variables 
-	associated to a submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>770</y><w>240</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Data class&gt;&gt;
+	associated to a submission</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>324</y>
+      <w>96</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data class&gt;&gt;
 Sightings
 --
 - submissions: ArrayList&lt;Submission&gt;
 --
 Responsibilities
--- Send multiple submission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>640</y><w>160</w><h>180</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;140;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1210</x><y>640</y><w>240</w><h>330</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;220;310</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1410</x><y>170</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+-- Send multiple submission</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>272</y>
+      <w>64</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>604</x>
+      <y>272</y>
+      <w>96</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>684</x>
+      <y>84</y>
+      <w>120</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
 LocationRepository
 --
 -fusedLocationClient: FusedLocationProviderClient
@@ -91,7 +213,18 @@ LocationRepository
 --
 Responsibilities
 -- The Class should retrieve the user 
-	location but it isn't implemented yet</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>1300</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Object&gt;&gt;
+	location but it isn't implemented yet</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>536</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Object&gt;&gt;
 SightingRepository
 --
 - sightings: Sightings.Companion
@@ -102,7 +235,40 @@ SightingRepository
 --
 Responsibilities
 -- Forwards the submit request to 
-	the NetworkClient Object</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>1100</y><w>30</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1650</x><y>860</y><w>40</w><h>300</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;280;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>590</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+	the NetworkClient Object</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>456</y>
+      <w>12</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>360</y>
+      <w>16</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>20.0;280.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>252</y>
+      <w>84</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data Class&gt;&gt;
 SightingSummary
 --
 - id: Int
@@ -111,7 +277,18 @@ SightingSummary
 - hasImage: Boolean
 --
 Responsibilities
--- Sending data to the map view</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>410</y><w>220</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+-- Sending data to the map view</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>180</y>
+      <w>88</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data Class&gt;&gt;
 SightingExtraData
 --
 - id: Int
@@ -119,7 +296,18 @@ SightingExtraData
 --
 Responsibilities
 -- Packet image data when the client 
-	want to retreive an image.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1160</x><y>1320</y><w>210</w><h>140</h></coordinates><panel_attributes>LocalConfigKt
+	want to retreive an image.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>584</x>
+      <y>544</y>
+      <w>84</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>LocalConfigKt
 --
 + BACKEND_URL: String
 + FRONTEND_URL: String
@@ -127,7 +315,29 @@ Responsibilities
 --
 Responsibilities
 -- Enables the developer to specify 
-	their own url properties</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>450</y><w>210</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>190;10;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>290</x><y>950</y><w>300</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+	their own url properties</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>344</x>
+      <y>196</y>
+      <w>84</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>236</x>
+      <y>396</y>
+      <w>120</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
 CameraViewModel
 --
 - userManager: UserManager
@@ -139,7 +349,18 @@ CameraViewModel
 + fun onRetakePhoto()
 --
 Responsibilities
--- Manages the states related to the camera screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>770</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+-- Manages the states related to the camera screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>324</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data Class&gt;&gt;
 CameraUiState
 --
 + date: Strin
@@ -150,7 +371,117 @@ CameraUiState
 --
 Responsibilities
 -- Holds the states related to the
- camera screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>930</y><w>110</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>90;30;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>750</y><w>100</w><h>70</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;50;80;10</additional_attributes></element><element><id>Relation</id><coordinates><x>470</x><y>520</y><w>340</w><h>100</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;80;320;10</additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>520</y><w>50</w><h>220</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;200;30;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1040</x><y>460</y><w>120</w><h>80</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1040</x><y>510</y><w>410</w><h>660</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>390;640;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1360</x><y>1310</y><w>90</w><h>40</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;20;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>900</x><y>1230</y><w>550</w><h>100</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>530;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>890</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>500</x><y>0</y><w>300</w><h>310</h></coordinates><panel_attributes>HomeScreen
+ camera screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>388</y>
+      <w>44</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>316</y>
+      <w>40</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;50.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>224</y>
+      <w>136</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;80.0;320.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>444</x>
+      <y>224</y>
+      <w>20</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;200.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>536</x>
+      <y>200</y>
+      <w>48</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>100.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>536</x>
+      <y>220</y>
+      <w>164</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>390.0;640.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>664</x>
+      <y>540</y>
+      <w>36</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>508</y>
+      <w>220</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>530.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>276</x>
+      <y>372</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>16</y>
+      <w>120</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes>HomeScreen
 --
 + HomeScreen(
    onNavigateToManualReport: () -&gt; Unit,
@@ -170,12 +501,56 @@ Responsibilities
 --
 Responsibilities
 -- Renders the homeScreen
--- Redriects to the other pages</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>300</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>850</x><y>130</y><w>260</w><h>90</h></coordinates><panel_attributes>InfoScreenKt
+-- Redriects to the other pages</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>428</x>
+      <y>136</y>
+      <w>12</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>68</y>
+      <w>104</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>InfoScreenKt
 --
 + fun InfoScreen(onNavigateBack: () -&gt; Unit)
 --
 Responsibilities
--- Shows information about the hedgehog</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>210</y><w>120</w><h>200</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>100;10;10;180</additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>80</y><w>210</w><h>190</h></coordinates><panel_attributes>NavigationScreenKt
+-- Shows information about the hedgehog</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>456</x>
+      <y>100</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>204</x>
+      <y>48</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>NavigationScreenKt
 --
 + isExpanded: Boolean
 --
@@ -183,7 +558,40 @@ Responsibilities
    onAboutClick: () -&gt; Unit, onMapClick: () -&gt; Unit)
 --
 Responsibilities
--- Shows a drop down menu on the home screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>180</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>1130</y><w>200</w><h>190</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>180;170;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>930</x><y>970</y><w>400</w><h>270</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+-- Shows a drop down menu on the home screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>284</x>
+      <y>88</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>468</y>
+      <w>80</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>180.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>492</x>
+      <y>404</y>
+      <w>160</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
 ManualViewModel
 --
 - userManager: UserManager
@@ -201,7 +609,18 @@ ManualViewModel
 + convertToEpochSeconds(dateStr: String, timeStr: String): Long?
 --
 Responsibilities
--- Manages the states related to the manual submit screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>920</y><w>210</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Data Class&gt;&gt;
+-- Manages the states related to the manual submit screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>376</x>
+      <y>384</y>
+      <w>84</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Data Class&gt;&gt;
 ManualReportUiState
 --
 - latitudeString: String
@@ -216,7 +635,62 @@ ManualReportUiState
 --
 Responsibilities
 -- Holds the states related to the 
-	manual submission screen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>850</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>1060</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;20</additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>850</y><w>70</w><h>140</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>50;120;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>760</x><y>1190</y><w>190</w><h>130</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;110;170;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1140</x><y>180</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;Class&gt;&gt;
+	manual submission screen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>356</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>456</x>
+      <y>440</y>
+      <w>44</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>484</x>
+      <y>356</y>
+      <w>28</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>50.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>424</x>
+      <y>492</y>
+      <w>76</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;110.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>556</x>
+      <y>120</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
 MapViewModel
 --
 +  pins: MutableState&lt;Sightings&gt;
@@ -227,4 +701,61 @@ MapViewModel
 --
 Responsibilities
 -- Manages the states related 
-	to the MapScreen</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>360</y><w>30</w><h>180</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1480</x><y>860</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element></diagram>
+	to the MapScreen</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>596</x>
+      <y>192</y>
+      <w>16</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;20.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>360</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>588</x>
+      <y>0</y>
+      <w>116</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;data class (ClusterItem)&gt;&gt;
+MapPin
+--
++ id: Int,
++ position: LatLng
++ title: String
++ snippet: String
++ zIndex: Float
+--
+Responsibilities
+-- Wrapper used by Google's clustering system.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>652</x>
+      <y>64</y>
+      <w>12</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;400.0</additional_attributes>
+  </element>
+</diagram>
