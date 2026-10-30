@@ -48,7 +48,7 @@ Open your terminal in the root directory of the project and execute the Gradle r
 ```
 ---
 
-### 3. Running the Mobile Application 📱
+### 3. Running the Mobile Application
 
 1. Open **Android Studio**.
 2. Open the project.
